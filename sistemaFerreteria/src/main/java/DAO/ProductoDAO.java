@@ -40,7 +40,7 @@ public class ProductoDAO implements IProductoDAO {
     public Producto obtener(Integer id) throws DAOException {
         try(
             Connection conexion = MANAGER.crearConexion();
-            PreparedStatement comando = conexion.prepareStatement("select * from productos where id = ?");
+            PreparedStatement comando = conexion.prepareStatement("select * from productos where ProductoID = ?");
         ) {
             comando.setInt(1, id);
             ResultSet resultado = comando.executeQuery();

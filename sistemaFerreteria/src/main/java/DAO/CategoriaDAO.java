@@ -40,7 +40,7 @@ public class CategoriaDAO implements ICategoriaDAO {
     public Categoria obtener(Integer id) throws DAOException {
         try(
             Connection conexion = MANAGER.crearConexion();
-            PreparedStatement comando = conexion.prepareStatement("select * from categorias where id = ?");
+            PreparedStatement comando = conexion.prepareStatement("select * from categorias where CategoriaID = ?");
         ) {
             comando.setInt(1, id);
             ResultSet resultado = comando.executeQuery();
@@ -54,8 +54,8 @@ public class CategoriaDAO implements ICategoriaDAO {
             
             return categoria;
         } catch(SQLException sqle) {
-            LOG.log(Level.SEVERE, "No se pudo obtener el categoría" + "{0}", sqle.getMessage());
-            throw new DAOException("No se pudo obtener el categoría" + sqle.getMessage());
+            LOG.log(Level.SEVERE, "No se pudo obtener la categoría" + "{0}", sqle.getMessage());
+            throw new DAOException("No se pudo obtener la categoría" + sqle.getMessage());
         }
     }
 
@@ -88,8 +88,8 @@ public class CategoriaDAO implements ICategoriaDAO {
                 throw new DAOException("No se mostró el ID");
             }
         } catch(SQLException sqle) {
-            LOG.log(Level.SEVERE, "No se pudo insertar el categoría" + "{0}", sqle.getMessage());
-            throw new DAOException("No se pudo insertar el categoría" + sqle.getMessage());
+            LOG.log(Level.SEVERE, "No se pudo insertar la categoría" + "{0}", sqle.getMessage());
+            throw new DAOException("No se pudo insertar la categoría" + sqle.getMessage());
         }
     }
 
@@ -114,8 +114,8 @@ public class CategoriaDAO implements ICategoriaDAO {
             
             return eliminacion ? categoria : null;
         } catch(SQLException sqle) {
-            LOG.log(Level.SEVERE, "No se pudo eliminar el categoría" + "{0}", sqle.getMessage());
-            throw new DAOException("No se pudo eliminar el categoría" + sqle.getMessage());
+            LOG.log(Level.SEVERE, "No se pudo eliminar la categoría" + "{0}", sqle.getMessage());
+            throw new DAOException("No se pudo eliminar la categoría" + sqle.getMessage());
         }
     }
 
