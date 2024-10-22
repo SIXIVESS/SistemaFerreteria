@@ -1,6 +1,5 @@
 package DAO;
 
-import static com.google.protobuf.JavaFeaturesProto.java;
 import dominio.Producto;
 import excepciones.DAOException;
 import interfaces.IConexionDB;
@@ -111,7 +110,7 @@ public class ProductoDAO implements IProductoDAO {
     @Override
     public Producto eliminar(Integer id) throws DAOException {
         Producto producto = this.obtener(id);
-        String sql = "delete from productos where id = ?";
+        String sql = "delete from productos where ProductoID = ?";
         
         try(
             Connection conexion = MANAGER.crearConexion();
