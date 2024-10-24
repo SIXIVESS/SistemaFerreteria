@@ -146,7 +146,7 @@ public class VentaDAO implements IVentaDAO {
             
             while(resultado.next()) {
                 Integer id = resultado.getInt("VentaID");
-                Date fecha = resultado.getDate("Nombre");
+                Date fecha = resultado.getDate("Fecha");
                 Float total = resultado.getFloat("Total");
                 Venta venta = new Venta(id, fecha, total);
                 
