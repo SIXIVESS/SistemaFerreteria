@@ -206,7 +206,7 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
         
         control.agregarProducto(producto);
         
-        JOptionPane.showMessageDialog(this, "Producto: " + txtNombre.getText() + "agregado correctamente", "Producto agregado!!", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Producto: " + txtNombre.getText() + " agregado correctamente", "Producto agregado!!", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
