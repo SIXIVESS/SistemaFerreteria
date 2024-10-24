@@ -1,8 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package main;
+
+import Vista.FrmMenuPrincipal;
 
 /**
  *
@@ -11,6 +9,7 @@ package main;
 public class SistemaFerreteria {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        FrmMenuPrincipal main = new FrmMenuPrincipal();
+        main.setVisible(true);
     }
 }
