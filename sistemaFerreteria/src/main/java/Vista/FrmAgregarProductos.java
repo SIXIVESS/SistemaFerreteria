@@ -3,8 +3,10 @@ package Vista;
 import control.Control;
 import dominio.Categoria;
 import dominio.Producto;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -23,6 +25,18 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
         for (Categoria categoria : categorias) {
             this.cbxCategoria.addItem(categoria);
         }
+    }
+    
+    private boolean verificarCampos() {
+        if("".equalsIgnoreCase(this.txtID.getText())) {
+            return false;
+        }else if("".equalsIgnoreCase(this.txtNombre.getText())) {
+            return false;
+        }else if("".equalsIgnoreCase(this.txtPrecio.getText())) {
+            return false;
+        }
+            
+        return true;
     }
 
     /**
@@ -89,6 +103,12 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
         jLabel5.setText("Categoría");
 
         txtID.setEditable(false);
+
+        txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyTyped(evt);
+            }
+        });
 
         btnAgregar.setBackground(new java.awt.Color(42, 157, 143));
         btnAgregar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
@@ -196,22 +216,39 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        Producto producto = new Producto();
-        Categoria categoria = (Categoria) this.cbxCategoria.getSelectedItem();
-        
-        producto.setNombre(txtNombre.getText());
-        producto.setPrecio(Float.valueOf(txtPrecio.getText()));
-        producto.setStock(10);
-        producto.setId_categoria(categoria.getId());
-        
-        control.agregarProducto(producto);
-        
-        JOptionPane.showMessageDialog(this, "Producto: " + txtNombre.getText() + " agregado correctamente", "Producto agregado!!", JOptionPane.INFORMATION_MESSAGE);
-        
-        FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
-        ce.setVisible(true);
-        dispose();
+        if(this.verificarCampos()) {
+            Producto producto = new Producto();
+            Categoria categoria = (Categoria) this.cbxCategoria.getSelectedItem();
+
+            producto.setNombre(txtNombre.getText());
+            producto.setPrecio(Float.valueOf(txtPrecio.getText()));
+            producto.setStock(10);
+            producto.setId_categoria(categoria.getId());
+
+            control.agregarProducto(producto);
+
+            JOptionPane.showMessageDialog(this, "Producto: " + txtNombre.getText() + " agregado correctamente", "Producto agregado!!", JOptionPane.INFORMATION_MESSAGE);
+
+            FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
+            ce.setVisible(true);
+            dispose();
+        }else {
+            JOptionPane.showMessageDialog(this, "Debe llenar los campos", "Campos faltantes", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped
+        char c = evt.getKeyChar();
+        
+        if(!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE && c != '.') {
+            JOptionPane.showMessageDialog(this, "Para el precio solo puedes ingresar números", "Formato no valido!", JOptionPane.INFORMATION_MESSAGE);
+            evt.consume();
+        }
+        
+        if(c == '.' && ((JTextField) evt.getSource()).getText().contains(".")) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPrecioKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;

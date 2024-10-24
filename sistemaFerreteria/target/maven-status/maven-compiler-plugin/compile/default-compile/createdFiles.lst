@@ -9,6 +9,7 @@ Vista\FrmMenuPrincipal.class
 FrmGenerarReporte.class
 interfaces\IVentaDAO.class
 db\ConexionDB.class
+Vista\FrmAgregarProductos$3.class
 dominio\Venta.class
 Vista\FrmAgregarProductos.class
 DAO\CategoriaDAO.class
