@@ -1,16 +1,28 @@
 package Vista;
 
+import control.Control;
+import dominio.Categoria;
+import dominio.Producto;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author chaly
  */
 public class FrmAgregarProductos extends javax.swing.JFrame {
+    private Control control = new Control();
 
     /**
-     * Creates new form FrmAgregarProductos2
+     * Creates new form FrmAgregarProductos.
+     * @param categorias Categorias a mostrar en el combobox.
      */
-    public FrmAgregarProductos() {
+    public FrmAgregarProductos(List<Categoria> categorias) {
         initComponents();
+        
+        for (Categoria categoria : categorias) {
+            this.cbxCategoria.addItem(categoria);
+        }
     }
 
     /**
@@ -82,6 +94,11 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
         btnAgregar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
         btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
         btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         btnRegresar.setBackground(new java.awt.Color(231, 111, 81));
         btnRegresar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
@@ -92,8 +109,6 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
                 btnRegresarActionPerformed(evt);
             }
         });
-
-        cbxCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -179,10 +194,25 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
         ce.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        Producto producto = new Producto();
+        Categoria categoria = (Categoria) this.cbxCategoria.getSelectedItem();
+        
+        producto.setNombre(txtNombre.getText());
+        producto.setPrecio(Float.valueOf(txtPrecio.getText()));
+        producto.setStock(10);
+        producto.setId_categoria(categoria.getId());
+        
+        control.agregarProducto(producto);
+        
+        JOptionPane.showMessageDialog(this, "Producto: " + txtNombre.getText() + "agregado correctamente", "Producto agregado!!", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> cbxCategoria;
+    private javax.swing.JComboBox<Categoria> cbxCategoria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

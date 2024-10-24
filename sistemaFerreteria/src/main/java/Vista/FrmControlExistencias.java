@@ -1,11 +1,14 @@
 package Vista;
 
+import control.Control;
+
 /**
  *
  * @author chaly
  */
 public class FrmControlExistencias extends javax.swing.JFrame {
-
+    private Control control = new Control();
+    
     /**
      * Creates new form FrmControlExistencias2
      */
@@ -155,7 +158,7 @@ public class FrmControlExistencias extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        FrmAgregarProductos ap = new FrmAgregarProductos();
+        FrmAgregarProductos ap = new FrmAgregarProductos(control.obtenerListaCategorias());
         ap.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnActualizarActionPerformed
