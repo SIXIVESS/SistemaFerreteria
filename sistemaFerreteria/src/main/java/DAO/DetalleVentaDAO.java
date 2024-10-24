@@ -1,7 +1,6 @@
 package DAO;
 
 import dominio.DetalleVenta;
-import dominio.Producto;
 import excepciones.DAOException;
 import interfaces.IConexionDB;
 import interfaces.IDetalleVentaDAO;
@@ -54,6 +53,8 @@ public class DetalleVentaDAO implements IDetalleVentaDAO {
                 Float precio_unitario = resultado.getFloat("PrecioUnitario");
                 
                 detalle = new DetalleVenta(id_venta, id_producto, cantidad, precio_unitario);
+            }else {
+                throw new DAOException("No se pudo obtener el detalle de venta con ID: " + id);
             }
             
             return detalle;
@@ -117,9 +118,13 @@ public class DetalleVentaDAO implements IDetalleVentaDAO {
         ) {
             comando.setInt(1, id);
             
-            boolean eliminacion = comando.execute();
+            int afectadas = comando.executeUpdate();
             
-            return eliminacion ? detalle : null;
+            if(afectadas > 0) {
+                return detalle;
+            }else {
+                throw new DAOException("No se pudo eliminar el detalle de venta con ID: " + id);
+            }
         } catch(SQLException sqle) {
             LOG.log(Level.SEVERE, "No se pudo eliminar el detalle de venta" + "{0}", sqle.getMessage());
             throw new DAOException("No se pudo eliminar el detalle de venta" + sqle.getMessage());

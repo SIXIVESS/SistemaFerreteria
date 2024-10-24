@@ -54,6 +54,8 @@ public class ProductoDAO implements IProductoDAO {
                 Integer id_categoria = resultado.getInt("CategoriaID");
                 
                 producto = new Producto(nombre, descripcion, precio, stock, id_categoria);
+            }else {
+                throw new DAOException("No se pudo obtener el producto con ID: " + id);
             }
             
             return producto;
@@ -118,9 +120,13 @@ public class ProductoDAO implements IProductoDAO {
         ) {
             comando.setInt(1, id);
             
-            boolean eliminacion = comando.execute();
+            int afectadas = comando.executeUpdate();
             
-            return eliminacion ? producto : null;
+            if(afectadas > 0) {
+                return producto;
+            }else {
+                throw new DAOException("No se pudo eliminar el producto con ID: " + id);
+            }
         } catch(SQLException sqle) {
             LOG.log(Level.SEVERE, "No se pudo eliminar el producto" + "{0}", sqle.getMessage());
             throw new DAOException("No se pudo eliminar el producto" + sqle.getMessage());

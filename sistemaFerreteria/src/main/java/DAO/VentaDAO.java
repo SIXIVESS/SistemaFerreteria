@@ -52,6 +52,8 @@ public class VentaDAO implements IVentaDAO {
                 Float total = resultado.getFloat("Total");
                 
                 venta = new Venta(fecha, total);
+            }else {
+                throw new DAOException("No se pudo obtener la venta con ID: " + id);
             }
             
             return venta;
@@ -113,9 +115,13 @@ public class VentaDAO implements IVentaDAO {
         ) {
             comando.setInt(1, id);
             
-            boolean eliminacion = comando.execute();
+            int afectadas = comando.executeUpdate();
             
-            return eliminacion ? venta : null;
+            if(afectadas > 0) {
+                return venta;
+            }else {
+                throw new DAOException("No se pudo eliminar la venta con ID: " + id);
+            }
         } catch(SQLException sqle) {
             LOG.log(Level.SEVERE, "No se pudo eliminar la venta" + "{0}", sqle.getMessage());
             throw new DAOException("No se pudo eliminar la venta" + sqle.getMessage());

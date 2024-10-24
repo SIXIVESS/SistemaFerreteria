@@ -50,6 +50,8 @@ public class CategoriaDAO implements ICategoriaDAO {
                 String nombre = resultado.getString("Nombre");
                 
                 categoria = new Categoria(nombre);
+            }else {
+                throw new DAOException("No se pudo obtener la categoría con ID: " + id);
             }
             
             return categoria;
@@ -110,9 +112,13 @@ public class CategoriaDAO implements ICategoriaDAO {
         ) {
             comando.setInt(1, id);
             
-            boolean eliminacion = comando.execute();
+            int afectadas = comando.executeUpdate();
             
-            return eliminacion ? categoria : null;
+            if(afectadas > 0) {
+                return categoria;
+            }else {
+                throw new DAOException("No se pudo eliminar la categoría con ID: " + id);
+            }
         } catch(SQLException sqle) {
             LOG.log(Level.SEVERE, "No se pudo eliminar la categoría" + "{0}", sqle.getMessage());
             throw new DAOException("No se pudo eliminar la categoría" + sqle.getMessage());
