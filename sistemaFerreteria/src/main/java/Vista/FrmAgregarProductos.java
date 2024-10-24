@@ -28,9 +28,7 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
     }
     
     private boolean verificarCampos() {
-        if("".equalsIgnoreCase(this.txtID.getText())) {
-            return false;
-        }else if("".equalsIgnoreCase(this.txtNombre.getText())) {
+        if("".equalsIgnoreCase(this.txtNombre.getText())) {
             return false;
         }else if("".equalsIgnoreCase(this.txtPrecio.getText())) {
             return false;
