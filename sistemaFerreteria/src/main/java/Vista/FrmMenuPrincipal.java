@@ -1,11 +1,14 @@
 package Vista;
 
+import control.Control;
+
 /**
  *
  * @author chaly
  */
 public class FrmMenuPrincipal extends javax.swing.JFrame {
-
+    private Control control = new Control();
+    
     /**
      * Creates new form FrmMenuPrincipal2
      */
@@ -125,7 +128,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
-        FrmControlExistencias ce = new FrmControlExistencias();
+        FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
         ce.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnIniciarActionPerformed

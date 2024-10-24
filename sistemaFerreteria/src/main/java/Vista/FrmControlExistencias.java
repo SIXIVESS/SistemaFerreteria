@@ -1,6 +1,9 @@
 package Vista;
 
 import control.Control;
+import dominio.Producto;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -8,11 +11,31 @@ import control.Control;
  */
 public class FrmControlExistencias extends javax.swing.JFrame {
     private Control control = new Control();
+    private DefaultTableModel productosModel;
     
     /**
-     * Creates new form FrmControlExistencias2
+     * Creates new form FrmControlExistencias.
+     * @param productos Productos a mostrar en la tabla.
      */
-    public FrmControlExistencias() {
+    public FrmControlExistencias(List<Producto> productos) {
+        this.productosModel = new DefaultTableModel();
+        
+        productosModel.addColumn("ID");
+        productosModel.addColumn("Nombre");
+        productosModel.addColumn("Precio");
+        productosModel.addColumn("Stock actual");
+        productosModel.addColumn("Categoría");
+        
+        for (Producto producto : productos) {
+            productosModel.addRow(new Object[]{
+                producto.getId(),
+                producto.getNombre(),
+                producto.getPrecio(),
+                producto.getStock(),
+                producto.getId_categoria()
+            });
+        }
+        
         initComponents();
     }
 
@@ -27,7 +50,7 @@ public class FrmControlExistencias extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblProductos = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         lblExistencias = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -38,18 +61,8 @@ public class FrmControlExistencias extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(247, 221, 159));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "ID", "Nombre", "Precio", "Stock actual", "Categoría"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        tblProductos.setModel(productosModel);
+        jScrollPane1.setViewportView(tblProductos);
 
         jPanel2.setBackground(new java.awt.Color(253, 253, 250));
 
@@ -169,8 +182,8 @@ public class FrmControlExistencias extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblExistencias;
+    private javax.swing.JTable tblProductos;
     // End of variables declaration//GEN-END:variables
 }

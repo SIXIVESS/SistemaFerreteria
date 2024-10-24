@@ -15,8 +15,9 @@ import java.util.List;
  * @author Samuel Vega
  */
 public class Control {
-    private IConexionDB conexion;
+    private final IConexionDB conexion;
     
+    // Constructor que inicializa conectandose a la base de datos.
     public Control() {
         this.conexion = new ConexionDB("jdbc:mysql://localhost/ferreteria", "root", "");
     }
@@ -31,9 +32,23 @@ public class Control {
         productos.insertar(producto);
     }
     
+    /**
+     * Obtiene la lista de categorías existentes desde la base de datos.
+     * @return La lista de categorías existentes desde la base de datos.
+     */
     public List<Categoria> obtenerListaCategorias() {
         ICategoriaDAO categorias = new CategoriaDAO(conexion);
         
         return categorias.consultarLista();
+    }
+    
+    /**
+     * Obtiene la lista de productos existentes desde la base de datos.
+     * @return La lista de productos existentes desde la base de datos. 
+     */
+    public List<Producto> obtenerListaProductos() {
+        IProductoDAO productos = new ProductoDAO(conexion);
+        
+        return productos.consultarLista();
     }
 }

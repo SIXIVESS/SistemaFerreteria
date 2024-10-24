@@ -190,7 +190,7 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        FrmControlExistencias ce = new FrmControlExistencias();
+        FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
         ce.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -207,6 +207,10 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
         control.agregarProducto(producto);
         
         JOptionPane.showMessageDialog(this, "Producto: " + txtNombre.getText() + " agregado correctamente", "Producto agregado!!", JOptionPane.INFORMATION_MESSAGE);
+        
+        FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
+        ce.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
