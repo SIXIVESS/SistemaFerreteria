@@ -1,13 +1,13 @@
 package vista;
 
-import control.Control;
+import control.ControlPersistencia;
 
 /**
  *
  * @author chaly
  */
 public class FrmMenuPrincipal extends javax.swing.JFrame {
-    private Control control = new Control();
+    private ControlPersistencia control = new ControlPersistencia();
     
     /**
      * Creates new form FrmMenuPrincipal2

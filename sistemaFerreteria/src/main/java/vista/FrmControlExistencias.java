@@ -1,6 +1,6 @@
 package vista;
 
-import control.Control;
+import control.ControlPersistencia;
 import dominio.Producto;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
  * @author chaly
  */
 public class FrmControlExistencias extends javax.swing.JFrame {
-    private Control control = new Control();
+    private ControlPersistencia control = new ControlPersistencia();
     private DefaultTableModel productosModel;
     
     /**

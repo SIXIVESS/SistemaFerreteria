@@ -11,14 +11,14 @@ import interfaces.IProductoDAO;
 import java.util.List;
 
 /**
- * Lleva el control de las funciones del sistema.
+ * Lleva el control de las funciones de persistencia del sistema.
  * @author Samuel Vega
  */
-public class Control {
+public class ControlPersistencia {
     private final IConexionDB conexion;
     
     // Constructor que inicializa conectandose a la base de datos.
-    public Control() {
+    public ControlPersistencia() {
         this.conexion = new ConexionDB("jdbc:mysql://localhost/ferreteria", "root", "");
     }
     

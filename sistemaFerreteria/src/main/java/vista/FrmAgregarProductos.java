@@ -1,6 +1,6 @@
 package vista;
 
-import control.Control;
+import control.ControlPersistencia;
 import dominio.Categoria;
 import dominio.Producto;
 import java.awt.event.KeyEvent;
@@ -13,7 +13,7 @@ import javax.swing.JTextField;
  * @author chaly
  */
 public class FrmAgregarProductos extends javax.swing.JFrame {
-    private Control control = new Control();
+    private ControlPersistencia control = new ControlPersistencia();
 
     /**
      * Creates new form FrmAgregarProductos.
