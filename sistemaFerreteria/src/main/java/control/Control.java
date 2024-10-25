@@ -1,7 +1,7 @@
 package control;
 
-import DAO.CategoriaDAO;
-import DAO.ProductoDAO;
+import dao.CategoriaDAO;
+import dao.ProductoDAO;
 import db.ConexionDB;
 import dominio.Categoria;
 import dominio.Producto;

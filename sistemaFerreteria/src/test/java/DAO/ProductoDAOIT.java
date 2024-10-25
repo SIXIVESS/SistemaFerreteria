@@ -1,5 +1,6 @@
 package DAO;
 
+import dao.ProductoDAO;
 import dominio.Producto;
 import excepciones.DAOException;
 import interfaces.IConexionDB;
