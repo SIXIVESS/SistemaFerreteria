@@ -1,4 +1,4 @@
-package DAO;
+package dao;
 
 import dao.DetalleVentaDAO;
 import dominio.DetalleVenta;

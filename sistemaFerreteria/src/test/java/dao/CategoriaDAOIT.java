@@ -1,4 +1,4 @@
-package DAO;
+package dao;
 
 import dao.CategoriaDAO;
 import dominio.Categoria;

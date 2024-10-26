@@ -1,4 +1,4 @@
-package DAO;
+package dao;
 
 import dao.ProductoDAO;
 import dominio.Producto;
