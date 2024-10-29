@@ -1,4 +1,4 @@
-package DAO;
+package dao;
 
 import dominio.Producto;
 import excepciones.DAOException;
@@ -169,20 +169,19 @@ public class ProductoDAO implements IProductoDAO {
     }
   /**
    * Regresa mensaje de confirmacion, producto actualizado
-   * @param stoc
+   * @param stock
    * @param id
    * @return
    * @throws DAOException 
    */
     @Override
-    public String actualizar(int stoc, int id) throws DAOException{
+    public String actualizar(int stock, int id) throws DAOException{
         try(
             Connection conexion = MANAGER.crearConexion();
             PreparedStatement comando = conexion.prepareStatement("update productos set Stock = ? where ProductoID = ?");
         ) {
-            comando.setInt(1,stoc);
+            comando.setInt(1,stock);
             comando.setInt(2,id);
-         //   comando.executeQuery();
             
             int afectadas = comando.executeUpdate();
             

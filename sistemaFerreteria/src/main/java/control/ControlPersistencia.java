@@ -1,7 +1,7 @@
 package control;
 
-import DAO.CategoriaDAO;
-import DAO.ProductoDAO;
+import dao.CategoriaDAO;
+import dao.ProductoDAO;
 import db.ConexionDB;
 import dominio.Categoria;
 import dominio.Producto;
@@ -11,14 +11,14 @@ import interfaces.IProductoDAO;
 import java.util.List;
 
 /**
- * Lleva el control de las funciones del sistema.
+ * Lleva el control de las funciones de persistencia del sistema.
  * @author Samuel Vega
  */
-public class Control {
+public class ControlPersistencia {
     private final IConexionDB conexion;
     
     // Constructor que inicializa conectandose a la base de datos.
-    public Control() {
+    public ControlPersistencia() {
         this.conexion = new ConexionDB("jdbc:mysql://localhost/ferreteria", "root", "");
     }
     
@@ -40,7 +40,9 @@ public class Control {
         ICategoriaDAO categorias = new CategoriaDAO(conexion);
         
         return categorias.consultarLista();
-    }/**
+    }
+    
+    /**
      * 
      * @param id
      * @return 
@@ -65,7 +67,7 @@ public class Control {
      */
     public String actualizarProducto(int stock, int id){
         IProductoDAO productos = new ProductoDAO(conexion);
-       return productos.actualizar(stock, id);   
+        return productos.actualizar(stock, id);   
         
     }
 }

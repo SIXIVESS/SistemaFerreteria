@@ -1,6 +1,6 @@
 package main;
 
-import Vista.FrmMenuPrincipal;
+import vista.FrmMenuPrincipal;
 
 /**
  *

@@ -1,5 +1,6 @@
-package DAO;
+package dao;
 
+import dao.CategoriaDAO;
 import dominio.Categoria;
 import excepciones.DAOException;
 import interfaces.ICategoriaDAO;

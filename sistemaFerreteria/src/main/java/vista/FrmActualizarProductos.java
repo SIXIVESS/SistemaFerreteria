@@ -1,6 +1,6 @@
-package Vista;
+package vista;
 
-import control.Control;
+import control.ControlPersistencia;
 import dominio.Categoria;
 import dominio.Producto;
 import java.awt.event.KeyEvent;
@@ -13,7 +13,7 @@ import javax.swing.JTextField;
  * @author chaly
  */
 public class FrmActualizarProductos extends javax.swing.JFrame {
-     private Control control = new Control();
+     private ControlPersistencia control = new ControlPersistencia();
       private Producto producto;
       private Categoria categoria;
     /**
@@ -278,6 +278,7 @@ public class FrmActualizarProductos extends javax.swing.JFrame {
         txtStock.setText("");
         txtNombre.setText("");
     }
+    
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
        FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
         ce.setVisible(true);

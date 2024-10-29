@@ -1,10 +1,14 @@
-package Vista;
+package vista;
 
-import control.Control;
+import control.ControlPersistencia;
 import dominio.Producto;
+import java.awt.Color;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -13,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmControlExistencias extends javax.swing.JFrame {
 
-    private Control control = new Control();
+    private ControlPersistencia control = new ControlPersistencia();
     private DefaultTableModel productosModel;
 
     /**
@@ -39,8 +43,10 @@ public class FrmControlExistencias extends javax.swing.JFrame {
                 producto.getId_categoria()
             });
         }
-
+        
         initComponents();
+        
+        tblProductos.setDefaultRenderer(Object.class, new ProductosRenderer());
     }
 
     /**
@@ -60,7 +66,7 @@ public class FrmControlExistencias extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
-        btnActualiazr = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,13 +119,13 @@ public class FrmControlExistencias extends javax.swing.JFrame {
             }
         });
 
-        btnActualiazr.setBackground(new java.awt.Color(42, 157, 143));
-        btnActualiazr.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
-        btnActualiazr.setForeground(new java.awt.Color(255, 255, 255));
-        btnActualiazr.setText("Actualizar");
-        btnActualiazr.addActionListener(new java.awt.event.ActionListener() {
+        btnActualizar.setBackground(new java.awt.Color(42, 157, 143));
+        btnActualizar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        btnActualizar.setForeground(new java.awt.Color(255, 255, 255));
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActualiazrActionPerformed(evt);
+                btnActualizarActionPerformed(evt);
             }
         });
 
@@ -135,7 +141,7 @@ public class FrmControlExistencias extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAgregar)
                         .addGap(50, 50, 50)
-                        .addComponent(btnActualiazr)
+                        .addComponent(btnActualizar)
                         .addGap(52, 52, 52)
                         .addComponent(btnRegresar))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -153,7 +159,7 @@ public class FrmControlExistencias extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegresar)
                     .addComponent(btnAgregar)
-                    .addComponent(btnActualiazr))
+                    .addComponent(btnActualizar))
                 .addContainerGap(77, Short.MAX_VALUE))
         );
 
@@ -194,12 +200,14 @@ public class FrmControlExistencias extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    private void btnActualiazrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualiazrActionPerformed
-
-        FrmActualizarProductos ap = new FrmActualizarProductos(seleccionarDato());
-        ap.setVisible(true);
-        dispose();
-    }//GEN-LAST:event_btnActualiazrActionPerformed
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        if(seleccionarDato() != null) {
+            FrmActualizarProductos ap = new FrmActualizarProductos(seleccionarDato());
+            ap.setVisible(true);
+            dispose();
+        }
+    }//GEN-LAST:event_btnActualizarActionPerformed
+    
     /**
      * Metodo para mandar el producto seleccionado a la pantalla de Actualizar
      *
@@ -212,6 +220,7 @@ public class FrmControlExistencias extends javax.swing.JFrame {
         filaseleccionada = tblProductos.getSelectedRow();
         if (filaseleccionada == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione un Producto");
+            return null;
         } else {
             DefaultTableModel tabla = (DefaultTableModel) tblProductos.getModel();
             for (int i = 0; i < tabla.getColumnCount(); i++) {
@@ -221,8 +230,9 @@ public class FrmControlExistencias extends javax.swing.JFrame {
         }
         return datos;
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnActualiazr;
+    private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JPanel jPanel1;
@@ -232,4 +242,22 @@ public class FrmControlExistencias extends javax.swing.JFrame {
     private javax.swing.JLabel lblExistencias;
     private javax.swing.JTable tblProductos;
     // End of variables declaration//GEN-END:variables
+
+    private static class ProductosRenderer extends DefaultTableCellRenderer {
+        
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            
+            int stock = (int) table.getValueAt(row, 3);
+            
+            if(stock <= 3) {
+                comp.setForeground(Color.RED);
+            }else {
+                comp.setForeground(Color.BLACK);
+            }
+            
+            return comp;
+        }
+    }
 }

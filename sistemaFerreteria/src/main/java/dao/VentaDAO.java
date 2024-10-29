@@ -1,4 +1,4 @@
-package DAO;
+package dao;
 
 import dominio.Venta;
 import excepciones.DAOException;

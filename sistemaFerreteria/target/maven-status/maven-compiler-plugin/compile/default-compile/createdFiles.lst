@@ -1,16 +1,16 @@
 Vista\FrmAgregarProductos$2.class
 Vista\FrmControlExistencias$3.class
-control\Control.class
 Vista\FrmMenuPrincipal$2.class
 Vista\FrmActualizarProductos.class
 Vista\FrmActualizarProductos$4.class
+Vista\FrmControlExistencias$ProductosRenderer.class
 dominio\DetalleVenta.class
 excepciones\DAOException.class
 Vista\FrmControlExistencias.class
 Vista\FrmActualizarProductos$3.class
 Vista\FrmMenuPrincipal.class
-FrmGenerarReporte.class
 interfaces\IVentaDAO.class
+Vista\FrmRegistroVentas.class
 db\ConexionDB.class
 Vista\FrmActualizarProductos$1.class
 Vista\FrmAgregarProductos$3.class
@@ -22,7 +22,6 @@ Vista\FrmControlExistencias$2.class
 DAO\DetalleVentaDAO.class
 Vista\FrmAgregarProductos$1.class
 Vista\FrmActualizarProductos$5.class
-FrmRegistroVentas.class
 interfaces\IDetalleVentaDAO.class
 interfaces\IProductoDAO.class
 Vista\FrmStockBajo.class
@@ -31,6 +30,8 @@ interfaces\IConexionDB.class
 Vista\FrmActualizarProductos$2.class
 main\SistemaFerreteria.class
 interfaces\ICategoriaDAO.class
+Vista\FrmGenerarReporte.class
+control\ControlPersistencia.class
 dominio\Categoria.class
 Vista\FrmMenuPrincipal$1.class
 DAO\VentaDAO.class

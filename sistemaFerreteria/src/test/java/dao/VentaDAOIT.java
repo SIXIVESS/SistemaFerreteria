@@ -1,5 +1,6 @@
-package DAO;
+package dao;
 
+import dao.VentaDAO;
 import dominio.Venta;
 import excepciones.DAOException;
 import interfaces.IConexionDB;
