@@ -40,4 +40,13 @@ public interface IProductoDAO {
      * @throws DAOException Si no se encuentran todos los productos.
      */
     List<Producto> consultarLista() throws DAOException;
+    
+    /**
+     * Actualiza el producto seleccionado
+     * @param stock
+     * @param id
+     * @return la fila actualizada
+     * @throws DAOException 
+     */
+    String actualizar(int stock, int id) throws DAOException;
 }

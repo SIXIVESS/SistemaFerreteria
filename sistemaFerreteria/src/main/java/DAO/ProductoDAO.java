@@ -167,5 +167,35 @@ public class ProductoDAO implements IProductoDAO {
             throw new DAOException("No se pudo consultar la lista de productos" + sqle.getMessage());
         }
     }
+  /**
+   * Regresa mensaje de confirmacion, producto actualizado
+   * @param stoc
+   * @param id
+   * @return
+   * @throws DAOException 
+   */
+    @Override
+    public String actualizar(int stoc, int id) throws DAOException{
+        try(
+            Connection conexion = MANAGER.crearConexion();
+            PreparedStatement comando = conexion.prepareStatement("update productos set Stock = ? where ProductoID = ?");
+        ) {
+            comando.setInt(1,stoc);
+            comando.setInt(2,id);
+         //   comando.executeQuery();
+            
+            int afectadas = comando.executeUpdate();
+            
+            if(afectadas > 0) {
+                return "El producto gue actualizado correctamente!";
+            }else {
+                throw new DAOException("No se pudo actualizar el producto con ID: " + id);
+            }
+        } catch(SQLException sqle) {
+            LOG.log(Level.SEVERE, "No se pudo actualizar el producto" + "{0}", sqle.getMessage());
+            throw new DAOException("No se pudo actualizar el producto" + sqle.getMessage());
+        } 
+        
+    }
     
 }

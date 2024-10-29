@@ -2,7 +2,9 @@ package Vista;
 
 import control.Control;
 import dominio.Producto;
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -10,22 +12,24 @@ import javax.swing.table.DefaultTableModel;
  * @author chaly
  */
 public class FrmControlExistencias extends javax.swing.JFrame {
+
     private Control control = new Control();
     private DefaultTableModel productosModel;
-    
+
     /**
      * Creates new form FrmControlExistencias.
+     *
      * @param productos Productos a mostrar en la tabla.
      */
     public FrmControlExistencias(List<Producto> productos) {
         this.productosModel = new DefaultTableModel();
-        
+
         productosModel.addColumn("ID");
         productosModel.addColumn("Nombre");
         productosModel.addColumn("Precio");
         productosModel.addColumn("Stock actual");
         productosModel.addColumn("Categoría");
-        
+
         for (Producto producto : productos) {
             productosModel.addRow(new Object[]{
                 producto.getId(),
@@ -35,7 +39,7 @@ public class FrmControlExistencias extends javax.swing.JFrame {
                 producto.getId_categoria()
             });
         }
-        
+
         initComponents();
     }
 
@@ -55,7 +59,8 @@ public class FrmControlExistencias extends javax.swing.JFrame {
         lblExistencias = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
-        btnActualizar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
+        btnActualiazr = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,13 +103,23 @@ public class FrmControlExistencias extends javax.swing.JFrame {
             }
         });
 
-        btnActualizar.setBackground(new java.awt.Color(42, 157, 143));
-        btnActualizar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
-        btnActualizar.setForeground(new java.awt.Color(255, 255, 255));
-        btnActualizar.setText("Actualizar");
-        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregar.setBackground(new java.awt.Color(42, 157, 143));
+        btnAgregar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActualizarActionPerformed(evt);
+                btnAgregarActionPerformed(evt);
+            }
+        });
+
+        btnActualiazr.setBackground(new java.awt.Color(42, 157, 143));
+        btnActualiazr.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        btnActualiazr.setForeground(new java.awt.Color(255, 255, 255));
+        btnActualiazr.setText("Actualizar");
+        btnActualiazr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualiazrActionPerformed(evt);
             }
         });
 
@@ -118,8 +133,10 @@ public class FrmControlExistencias extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnActualizar)
-                        .addGap(18, 18, 18)
+                        .addComponent(btnAgregar)
+                        .addGap(50, 50, 50)
+                        .addComponent(btnActualiazr)
+                        .addGap(52, 52, 52)
                         .addComponent(btnRegresar))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(136, Short.MAX_VALUE))
@@ -135,7 +152,8 @@ public class FrmControlExistencias extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegresar)
-                    .addComponent(btnActualizar))
+                    .addComponent(btnAgregar)
+                    .addComponent(btnActualiazr))
                 .addContainerGap(77, Short.MAX_VALUE))
         );
 
@@ -170,14 +188,42 @@ public class FrmControlExistencias extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         FrmAgregarProductos ap = new FrmAgregarProductos(control.obtenerListaCategorias());
         ap.setVisible(true);
         dispose();
-    }//GEN-LAST:event_btnActualizarActionPerformed
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
+    private void btnActualiazrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualiazrActionPerformed
+
+        FrmActualizarProductos ap = new FrmActualizarProductos(seleccionarDato());
+        ap.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnActualiazrActionPerformed
+    /**
+     * Metodo para mandar el producto seleccionado a la pantalla de Actualizar
+     *
+     * @return Producto Seleccionado
+     */
+    public List<String> seleccionarDato() {
+        int filaseleccionada;
+        List<String> datos = new ArrayList<>(5);
+
+        filaseleccionada = tblProductos.getSelectedRow();
+        if (filaseleccionada == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un Producto");
+        } else {
+            DefaultTableModel tabla = (DefaultTableModel) tblProductos.getModel();
+            for (int i = 0; i < tabla.getColumnCount(); i++) {
+                Object valor = tabla.getValueAt(filaseleccionada, i);
+                datos.add(valor.toString());
+            }
+        }
+        return datos;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnActualiazr;
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

@@ -40,15 +40,32 @@ public class Control {
         ICategoriaDAO categorias = new CategoriaDAO(conexion);
         
         return categorias.consultarLista();
+    }/**
+     * 
+     * @param id
+     * @return 
+     */
+    public Categoria obtenerCategoria(int id){
+        ICategoriaDAO categorias = new CategoriaDAO(conexion);
+        return categorias.obtener(id);
     }
-    
     /**
      * Obtiene la lista de productos existentes desde la base de datos.
      * @return La lista de productos existentes desde la base de datos. 
      */
     public List<Producto> obtenerListaProductos() {
-        IProductoDAO productos = new ProductoDAO(conexion);
-        
+        IProductoDAO productos = new ProductoDAO(conexion);        
         return productos.consultarLista();
+    }
+    /**
+     * obtiene mensaje de confirmacion, actualizacion realiazda
+     * @param stock
+     * @param id
+     * @return 
+     */
+    public String actualizarProducto(int stock, int id){
+        IProductoDAO productos = new ProductoDAO(conexion);
+       return productos.actualizar(stock, id);   
+        
     }
 }
