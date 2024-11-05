@@ -19,7 +19,7 @@ public class ControlPersistencia {
     
     // Constructor que inicializa conectandose a la base de datos.
     public ControlPersistencia() {
-        this.conexion = new ConexionDB("jdbc:mysql://localhost/ferreteria", "root", "");
+       this.conexion = ConexionDB.getInstance();
     }
     
     /**
