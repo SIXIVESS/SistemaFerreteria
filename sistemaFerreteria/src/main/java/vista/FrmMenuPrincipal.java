@@ -2,19 +2,17 @@ package vista;
 
 import control.ControlPersistencia;
 
-/**
- *
- * @author chaly
- */
 public class FrmMenuPrincipal extends javax.swing.JFrame {
+
     private ControlPersistencia control = new ControlPersistencia();
-    
+
     /**
      * Creates new form FrmMenuPrincipal2
      */
     public FrmMenuPrincipal() {
         initComponents();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -128,9 +126,9 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
-        FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
-        ce.setVisible(true);
-        dispose();
+        FrmLogin frmLogin = new FrmLogin(this); // Crear instancia del diálogo de inicio de sesión
+        frmLogin.setVisible(true);
+
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

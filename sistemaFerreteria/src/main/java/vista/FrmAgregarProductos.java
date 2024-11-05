@@ -27,15 +27,32 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
         }
     }
     
-    private boolean verificarCampos() {
-        if("".equalsIgnoreCase(this.txtNombre.getText())) {
-            return false;
-        }else if("".equalsIgnoreCase(this.txtPrecio.getText())) {
+private boolean verificarCampos() {
+    if (txtNombre.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "El campo 'Nombre' no puede estar vacío", "Campo vacío", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+    
+    String precioText = txtPrecio.getText().trim();
+    if (precioText.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "El campo 'Precio' no puede estar vacío", "Campo vacío", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+    
+    try {
+        float precio = Float.parseFloat(precioText);
+        if (precio <= 0) {
+            JOptionPane.showMessageDialog(this, "El precio debe ser mayor que cero", "Precio inválido", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-            
-        return true;
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Formato de precio no válido", "Error de formato", JOptionPane.ERROR_MESSAGE);
+        return false;
     }
+    
+    return true;
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -209,30 +226,29 @@ public class FrmAgregarProductos extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
+
         ce.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        if(this.verificarCampos()) {
-            Producto producto = new Producto();
-            Categoria categoria = (Categoria) this.cbxCategoria.getSelectedItem();
+        if (verificarCampos()) {
+        Producto producto = new Producto();
+        Categoria categoria = (Categoria) this.cbxCategoria.getSelectedItem();
 
-            producto.setNombre(txtNombre.getText());
-            producto.setPrecio(Float.valueOf(txtPrecio.getText()));
-            producto.setStock(10);
-            producto.setId_categoria(categoria.getId());
+        producto.setNombre(txtNombre.getText().trim());
+        producto.setPrecio(Float.parseFloat(txtPrecio.getText().trim()));
+        producto.setStock(10); // Este valor podría ser dinámico o ajustado según tu lógica.
+        producto.setId_categoria(categoria.getId());
 
-            control.agregarProducto(producto);
+        control.agregarProducto(producto);
 
-            JOptionPane.showMessageDialog(this, "Producto: " + txtNombre.getText() + " agregado correctamente", "Producto agregado!!", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Producto agregado correctamente: " + txtNombre.getText(), "Producto agregado", JOptionPane.INFORMATION_MESSAGE);
 
-            FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
-            ce.setVisible(true);
-            dispose();
-        }else {
-            JOptionPane.showMessageDialog(this, "Debe llenar los campos", "Campos faltantes", JOptionPane.ERROR_MESSAGE);
-        }
+        FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
+        ce.setVisible(true);
+        dispose();
+    }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped

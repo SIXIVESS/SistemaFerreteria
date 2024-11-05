@@ -156,6 +156,12 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Buscador"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField1ActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="FrmControlExistencias_jTextField1"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnRegresar">
           <Properties>

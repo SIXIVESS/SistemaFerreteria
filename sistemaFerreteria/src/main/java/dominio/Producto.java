@@ -4,9 +4,11 @@ import java.util.Objects;
 
 /**
  * Contiene los atributos y métodos de acceso de un producto.
+ *
  * @author Samuel Vega
  */
 public class Producto {
+
     private Integer id;
     private String nombre;
     private String descripcion;
@@ -15,10 +17,13 @@ public class Producto {
     private Integer id_categoria;
 
     // Constructor vacío
-    public Producto() {}
+    public Producto() {
+    }
 
     /**
-     * Constructor que inicializa los atributos de la clase, menos el ID del producto.
+     * Constructor que inicializa los atributos de la clase, menos el ID del
+     * producto.
+     *
      * @param nombre Nombre del producto.
      * @param descripcion Descripción del producto.
      * @param precio Precio del producto.
@@ -35,6 +40,7 @@ public class Producto {
 
     /**
      * Constructor que inicializa todos los atributos de la clase.
+     *
      * @param id ID del producto.
      * @param nombre Nombre del producto.
      * @param descripcion Descripción del producto.
@@ -100,7 +106,6 @@ public class Producto {
         this.id_categoria = id_categoria;
     }
 
-    
     @Override
     public int hashCode() {
         int hash = 7;

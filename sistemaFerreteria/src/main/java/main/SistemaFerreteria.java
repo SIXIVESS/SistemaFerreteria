@@ -2,10 +2,7 @@ package main;
 
 import vista.FrmMenuPrincipal;
 
-/**
- *
- * @author chaly
- */
+
 public class SistemaFerreteria {
 
     public static void main(String[] args) {

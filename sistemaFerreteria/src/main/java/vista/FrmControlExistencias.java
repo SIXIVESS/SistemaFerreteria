@@ -1,53 +1,69 @@
 package vista;
 
 import control.ControlPersistencia;
+import dominio.Categoria;
 import dominio.Producto;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
  * @author chaly
  */
 public class FrmControlExistencias extends javax.swing.JFrame {
-
-    private ControlPersistencia control = new ControlPersistencia();
     private DefaultTableModel productosModel;
 
-    /**
-     * Creates new form FrmControlExistencias.
-     *
-     * @param productos Productos a mostrar en la tabla.
-     */
     public FrmControlExistencias(List<Producto> productos) {
-        this.productosModel = new DefaultTableModel();
-
-        productosModel.addColumn("ID");
+        initComponents(); // Inicializa los componentes de la GUI
+        tblProductos = new JTable(); // Asegúrate de inicializar la tabla
+        productosModel = new DefaultTableModel(); // Inicializa el modelo de la tabla
+        productosModel.addColumn("ID"); // O los nombres de columnas que necesites
         productosModel.addColumn("Nombre");
-        productosModel.addColumn("Precio");
-        productosModel.addColumn("Stock actual");
-        productosModel.addColumn("Categoría");
+        productosModel.addColumn("Stock");
+
+        // Iterar sobre la lista de productos y añadir filas
+        for (Producto producto : productos) {
+            productosModel.addRow(new Object[]{producto.getId(), producto.getNombre(), producto.getStock()});
+        }
+        tblProductos.setModel(productosModel); // Configura el modelo de la tabla
+        this.add(new JScrollPane(tblProductos)); // Asegúrate de que la tabla sea visible
+        pack(); // Ajusta el tamaño del frame para que se ajuste a los componentes
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Asegúrate de cerrar el programa al cerrar la ventana
+        setLocationRelativeTo(null); // Centra el JFrame en la pantalla
+    }
+
+    private void inicializarTabla(List<Producto> productos) {
+        // No es necesario comprobar si productosModel es null.
+        productosModel.setRowCount(0); // Limpiar el modelo antes de llenarlo
 
         for (Producto producto : productos) {
-            productosModel.addRow(new Object[]{
-                producto.getId(),
-                producto.getNombre(),
-                producto.getPrecio(),
-                producto.getStock(),
-                producto.getId_categoria()
-            });
+            productosModel.addRow(new Object[]{producto.getId(), producto.getNombre(), producto.getStock()});
         }
-        
-        initComponents();
-        
+
+        tblProductos.setModel(productosModel);
         tblProductos.setDefaultRenderer(Object.class, new ProductosRenderer());
     }
+
+    private void filterTable() {
+        String filter = jTextField1.getText();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(productosModel);
+        tblProductos.setRowSorter(sorter);
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filter)); // Filtro sin considerar mayúsculas
+    }
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -98,6 +114,11 @@ public class FrmControlExistencias extends javax.swing.JFrame {
 
         jTextField1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         jTextField1.setText("Buscador");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
         btnRegresar.setBackground(new java.awt.Color(231, 111, 81));
         btnRegresar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
@@ -195,42 +216,50 @@ public class FrmControlExistencias extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        FrmAgregarProductos ap = new FrmAgregarProductos(control.obtenerListaCategorias());
-        ap.setVisible(true);
-        dispose();
+      ControlPersistencia control = new ControlPersistencia();
+        List<Categoria> categorias = control.obtenerListaCategorias(); // Cambia según tu implementación
+
+    // Crear una nueva instancia del formulario de agregar productos
+    FrmAgregarProductos ap = new FrmAgregarProductos(categorias);
+    
+    // Hacer visible el formulario
+    ap.setVisible(true);
+    
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        if(seleccionarDato() != null) {
+        if (seleccionarDato() != null) {
             FrmActualizarProductos ap = new FrmActualizarProductos(seleccionarDato());
             ap.setVisible(true);
             dispose();
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
-    
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
     /**
      * Metodo para mandar el producto seleccionado a la pantalla de Actualizar
      *
      * @return Producto Seleccionado
      */
     public List<String> seleccionarDato() {
-        int filaseleccionada;
-        List<String> datos = new ArrayList<>(5);
-
-        filaseleccionada = tblProductos.getSelectedRow();
+        int filaseleccionada = tblProductos.getSelectedRow();
         if (filaseleccionada == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione un Producto");
             return null;
-        } else {
-            DefaultTableModel tabla = (DefaultTableModel) tblProductos.getModel();
-            for (int i = 0; i < tabla.getColumnCount(); i++) {
-                Object valor = tabla.getValueAt(filaseleccionada, i);
-                datos.add(valor.toString());
-            }
+        }
+
+        List<String> datos = new ArrayList<>(5);
+        DefaultTableModel tabla = (DefaultTableModel) tblProductos.getModel();
+        for (int i = 0; i < tabla.getColumnCount(); i++) {
+            datos.add(tabla.getValueAt(filaseleccionada, i).toString());
         }
         return datos;
     }
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnAgregar;
@@ -242,21 +271,21 @@ public class FrmControlExistencias extends javax.swing.JFrame {
     private javax.swing.JLabel lblExistencias;
     private javax.swing.JTable tblProductos;
     // End of variables declaration//GEN-END:variables
+private static class ProductosRenderer extends DefaultTableCellRenderer {
 
-    private static class ProductosRenderer extends DefaultTableCellRenderer {
-        
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            
-            int stock = (int) table.getValueAt(row, 3);
-            
-            if(stock <= 3) {
+
+            // Suponiendo que la columna de stock es la tercera (índice 2)
+            int stock = (int) table.getValueAt(row, 2);
+
+            if (stock <= 3) {
                 comp.setForeground(Color.RED);
-            }else {
+            } else {
                 comp.setForeground(Color.BLACK);
             }
-            
+
             return comp;
         }
     }
