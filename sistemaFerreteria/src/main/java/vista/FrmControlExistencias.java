@@ -23,46 +23,33 @@ import javax.swing.table.TableRowSorter;
  * @author chaly
  */
 public class FrmControlExistencias extends javax.swing.JFrame {
-
+private ControlPersistencia control = new ControlPersistencia();
     private DefaultTableModel productosModel;
+     private List<Categoria> categorias;
+    
+       public FrmControlExistencias(List<Producto> productos) {
+        this.productosModel = new DefaultTableModel();
 
-    public FrmControlExistencias(List<Producto> productos) {
-        productosModel = new DefaultTableModel();
         productosModel.addColumn("ID");
         productosModel.addColumn("Nombre");
-        productosModel.addColumn("Stock");
+        productosModel.addColumn("Precio");
+        productosModel.addColumn("Stock actual");
+        productosModel.addColumn("Categoría");
 
-        if (productos != null) {
-            for (Producto producto : productos) {
-                productosModel.addRow(new Object[]{producto.getId(), producto.getNombre(), producto.getStock()});
-            }
+        for (Producto producto : productos) {
+            productosModel.addRow(new Object[]{
+                producto.getId(),
+                producto.getNombre(),
+                producto.getPrecio(),
+                producto.getStock(),
+                producto.getId_categoria()
+            });
         }
-
-        initComponents();
-
-        tblProductos.setModel(productosModel);
+            initComponents();
+        
         tblProductos.setDefaultRenderer(Object.class, new ProductosRenderer());
-
-        setLocationRelativeTo(null); // Centra la ventana
     }
-
-//    private void inicializarTabla(List<Producto> productos) {
-//        // No es necesario comprobar si productosModel es null.
-//        productosModel.setRowCount(0); // Limpiar el modelo antes de llenarlo
-//
-//        for (Producto producto : productos) {
-//            productosModel.addRow(new Object[]{producto.getId(), producto.getNombre(), producto.getStock()});
-//        }
-//
-//        tblProductos.setModel(productosModel);
-//        tblProductos.setDefaultRenderer(Object.class, new ProductosRenderer());
-//    }
-    private void filterTable() {
-        String filter = jTextField1.getText();
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(productosModel);
-        tblProductos.setRowSorter(sorter);
-        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filter)); // Filtro sin considerar mayúsculas
-    }
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -113,16 +100,11 @@ public class FrmControlExistencias extends javax.swing.JFrame {
 
         jTextField1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         jTextField1.setText("Buscador");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
 
         btnRegresar.setBackground(new java.awt.Color(231, 111, 81));
         btnRegresar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
         btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegresar.setText("Regresar");
+        btnRegresar.setText("Cerrar sesión");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegresarActionPerformed(evt);
@@ -155,17 +137,17 @@ public class FrmControlExistencias extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(133, 133, 133)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAgregar)
-                        .addGap(50, 50, 50)
+                        .addGap(18, 18, 18)
                         .addComponent(btnActualizar)
-                        .addGap(52, 52, 52)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRegresar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(136, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,7 +198,7 @@ public class FrmControlExistencias extends javax.swing.JFrame {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         ControlPersistencia control = new ControlPersistencia();
-        List<Categoria> categorias = control.obtenerListaCategorias(); // Cambia según tu implementación
+        List<Categoria> categorias = control.obtenerListaCategorias();
 
         FrmAgregarProductos ap = new FrmAgregarProductos(categorias);
 
@@ -225,28 +207,28 @@ public class FrmControlExistencias extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        if (seleccionarDato() != null) {
+        if(seleccionarDato() != null) {
             FrmActualizarProductos ap = new FrmActualizarProductos(seleccionarDato());
             ap.setVisible(true);
             dispose();
         }
+    
+    
     }//GEN-LAST:event_btnActualizarActionPerformed
+  public List<String> seleccionarDato() {
+        int filaseleccionada;
+        List<String> datos = new ArrayList<>(5);
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    public List<String> seleccionarDato() {
-        int filaseleccionada = tblProductos.getSelectedRow();
+        filaseleccionada = tblProductos.getSelectedRow();
         if (filaseleccionada == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione un Producto");
             return null;
-        }
-
-        List<String> datos = new ArrayList<>(5);
-        DefaultTableModel tabla = (DefaultTableModel) tblProductos.getModel();
-        for (int i = 0; i < tabla.getColumnCount(); i++) {
-            datos.add(tabla.getValueAt(filaseleccionada, i).toString());
+        } else {
+            DefaultTableModel tabla = (DefaultTableModel) tblProductos.getModel();
+            for (int i = 0; i < tabla.getColumnCount(); i++) {
+                Object valor = tabla.getValueAt(filaseleccionada, i);
+                datos.add(valor.toString());
+            }
         }
         return datos;
     }
@@ -263,21 +245,21 @@ public class FrmControlExistencias extends javax.swing.JFrame {
     private javax.swing.JLabel lblExistencias;
     private javax.swing.JTable tblProductos;
     // End of variables declaration//GEN-END:variables
- private static class ProductosRenderer extends DefaultTableCellRenderer {
-
+ 
+    private static class ProductosRenderer extends DefaultTableCellRenderer {
+        
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-            // Suponiendo que la columna de stock es la tercera (índice 2)
-            int stock = (int) table.getValueAt(row, 2);
-
-            if (stock <= 3) {
+            
+            int stock = (int) table.getValueAt(row, 3);
+            
+            if(stock <= 3) {
                 comp.setForeground(Color.RED);
-            } else {
+            }else {
                 comp.setForeground(Color.BLACK);
             }
-
+            
             return comp;
         }
     }

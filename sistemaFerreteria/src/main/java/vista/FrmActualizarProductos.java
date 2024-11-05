@@ -5,6 +5,7 @@ import dominio.Categoria;
 import dominio.Producto;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -16,14 +17,11 @@ public class FrmActualizarProductos extends javax.swing.JFrame {
      private ControlPersistencia control = new ControlPersistencia();
       private Producto producto;
       private Categoria categoria;
-    /**
-     * Creates new form FrmActualizarProductos2
-     * @param dato
-     */
+    
     public FrmActualizarProductos(List<String> dato) {
         initComponents();
         
-        producto = new Producto();
+         producto = new Producto();
         producto.setId(Integer.valueOf(dato.get(0)));
         producto.setNombre(dato.get(1));
         producto.setPrecio(Float.valueOf(dato.get(2)));
@@ -36,7 +34,6 @@ public class FrmActualizarProductos extends javax.swing.JFrame {
         txtStock.setText(dato.get(3));
         Categoria categoria = control.obtenerCategoria(producto.getId_categoria());
         txtCatrgoria.setText(categoria.getNombre());
-       
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -117,11 +114,6 @@ public class FrmActualizarProductos extends javax.swing.JFrame {
         txtStock.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 txtStockMousePressed(evt);
-            }
-        });
-        txtStock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtStockActionPerformed(evt);
             }
         });
         txtStock.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -257,7 +249,7 @@ public class FrmActualizarProductos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        if (this.verificarCampos()) {
+         if (this.verificarCampos()) {
            String resultado = control.actualizarProducto(Integer.parseInt(txtStock.getText()),Integer.parseInt(txtId.getText()));
             JOptionPane.showMessageDialog(null,resultado);
              limpiarCampos(); 
@@ -271,42 +263,38 @@ public class FrmActualizarProductos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
-    public void limpiarCampos(){
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
+        ce.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void txtStockMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtStockMousePressed
+        txtStock.setText("");
+    }//GEN-LAST:event_txtStockMousePressed
+
+    private boolean verificarCampos() {
+        return !txtStock.getText().isEmpty();
+    }
+
+    public void limpiarCampos() {
         txtCatrgoria.setText("");
         txtId.setText("");
         txtPrecio.setText("");
         txtStock.setText("");
         txtNombre.setText("");
     }
-    
-    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-       FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
-        ce.setVisible(true);
-        dispose();
-    }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void txtStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtStockActionPerformed
 
-    private void txtStockMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtStockMousePressed
-        txtStock.setText("");
-    }//GEN-LAST:event_txtStockMousePressed
-    
-    private boolean verificarCampos() {
-        
-     return !"".equalsIgnoreCase(this.txtStock.getText());
-     
-    }
     private void txtStockKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockKeyTyped
         char c = evt.getKeyChar();
-        
-        if(!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE && c != '.') {
+
+        if (!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE && c != '.') {
             JOptionPane.showMessageDialog(this, "Para el Stock solo puedes ingresar números", "Formato no valido!", JOptionPane.INFORMATION_MESSAGE);
             evt.consume();
         }
-        
-        if(c == '.' && ((JTextField) evt.getSource()).getText().contains(".")) {
+
+        if (c == '.' && ((JTextField) evt.getSource()).getText().contains(".")) {
             evt.consume();
         }
     }//GEN-LAST:event_txtStockKeyTyped

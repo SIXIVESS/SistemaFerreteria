@@ -2,6 +2,7 @@ vista\FrmControlExistencias$ProductosRenderer.class
 vista\FrmAgregarProductos$3.class
 vista\FrmStockBajo.class
 vista\FrmActualizarProductos$4.class
+vista\FrmRegister$1.class
 vista\FrmControlExistencias.class
 dominio\DetalleVenta.class
 vista\FrmActualizarProductos$1.class
@@ -9,9 +10,9 @@ interfaces\IVentaDAO.class
 db\ConexionDB.class
 interfaces\IUsuarioDAO.class
 dao\VentaDAO.class
-vista\FrmControlExistencias$4.class
 dominio\Usuario.class
 dominio\Producto.class
+vista\FrmRegister.class
 vista\FrmRegistroUsuario.class
 interfaces\IConexionDB.class
 vista\FrmActualizarProductos.class
@@ -22,13 +23,14 @@ vista\FrmMenuPrincipal$1.class
 dominio\Categoria.class
 vista\FrmControlExistencias$1.class
 vista\FrmRegistroUsuario$1$1.class
-vista\FrmActualizarProductos$5.class
+vista\FrmRegister$2.class
 vista\FrmActualizarProductos$2.class
 vista\FrmRegistroVentas.class
 vista\FrmAgregarProductos$1.class
 excepciones\DAOException.class
 vista\FrmLogin.class
 vista\FrmMenuPrincipal.class
+vista\FrmRegister$3.class
 vista\FrmGenerarReporte.class
 vista\FrmLogin$1.class
 vista\FrmAgregarProductos.class
@@ -36,6 +38,7 @@ dao\UsuarioDAO.class
 dao\DetalleVentaDAO.class
 dominio\Venta.class
 vista\FrmControlExistencias$2.class
+vista\FrmLogin$4.class
 vista\FrmMenuPrincipal$2.class
 vista\FrmAgregarProductos$2.class
 interfaces\IDetalleVentaDAO.class
