@@ -13,7 +13,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         initComponents();
     }
 
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -126,7 +125,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
-        FrmLogin frmLogin = new FrmLogin(this); // Crear instancia del diálogo de inicio de sesión
+        FrmLogin frmLogin = new FrmLogin(this);
         frmLogin.setVisible(true);
 
     }//GEN-LAST:event_btnIniciarActionPerformed

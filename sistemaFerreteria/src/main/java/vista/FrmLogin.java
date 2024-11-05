@@ -18,10 +18,16 @@ import javax.swing.JOptionPane;
  */
 public class FrmLogin extends JDialog {
 
+    private FrmMenuPrincipal menuPrincipal;
+
     public FrmLogin(JFrame parent) {
         super(parent, "Iniciar Sesión", true);
         initComponents();
         setLocationRelativeTo(parent);
+
+        if (parent instanceof FrmMenuPrincipal) {
+            this.menuPrincipal = (FrmMenuPrincipal) parent;
+        }
     }
 
     /**
@@ -181,8 +187,8 @@ public class FrmLogin extends JDialog {
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         FrmMenuPrincipal menuPrincipal = new FrmMenuPrincipal();
-        menuPrincipal.setVisible(true); // Muestra el formulario principal
-        dispose(); // Cierra el diálogo de inicio de sesión
+        menuPrincipal.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
@@ -192,22 +198,25 @@ public class FrmLogin extends JDialog {
         ControlPersistencia control = new ControlPersistencia();
         try {
             if (control.validarUsuario(nombreUsuario, contrasena)) {
-                // Login exitoso
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
-                FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
-                ce.setVisible(true);
+
+                List<Producto> productos = control.obtenerListaProductos();
+                FrmControlExistencias controlExistencias = new FrmControlExistencias(productos);
+                controlExistencias.setVisible(true);
+
                 this.dispose();
+                if (menuPrincipal != null) {
+                    menuPrincipal.dispose();
+                }
             } else if (nombreUsuario.isEmpty() || contrasena.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
-                return;
             } else {
                 JOptionPane.showMessageDialog(this, "Nombre de usuario o contraseña incorrectos");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-            e.printStackTrace(); // Imprimir la traza de la excepción para depurar
+            e.printStackTrace();
         }
-
     }//GEN-LAST:event_btnLoginActionPerformed
 
 

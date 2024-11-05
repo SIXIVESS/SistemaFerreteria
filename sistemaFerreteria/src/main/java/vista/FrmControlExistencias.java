@@ -23,47 +23,46 @@ import javax.swing.table.TableRowSorter;
  * @author chaly
  */
 public class FrmControlExistencias extends javax.swing.JFrame {
+
     private DefaultTableModel productosModel;
 
     public FrmControlExistencias(List<Producto> productos) {
-        initComponents(); // Inicializa los componentes de la GUI
-        tblProductos = new JTable(); // Asegúrate de inicializar la tabla
-        productosModel = new DefaultTableModel(); // Inicializa el modelo de la tabla
-        productosModel.addColumn("ID"); // O los nombres de columnas que necesites
+        productosModel = new DefaultTableModel();
+        productosModel.addColumn("ID");
         productosModel.addColumn("Nombre");
         productosModel.addColumn("Stock");
 
-        // Iterar sobre la lista de productos y añadir filas
-        for (Producto producto : productos) {
-            productosModel.addRow(new Object[]{producto.getId(), producto.getNombre(), producto.getStock()});
+        if (productos != null) {
+            for (Producto producto : productos) {
+                productosModel.addRow(new Object[]{producto.getId(), producto.getNombre(), producto.getStock()});
+            }
         }
-        tblProductos.setModel(productosModel); // Configura el modelo de la tabla
-        this.add(new JScrollPane(tblProductos)); // Asegúrate de que la tabla sea visible
-        pack(); // Ajusta el tamaño del frame para que se ajuste a los componentes
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Asegúrate de cerrar el programa al cerrar la ventana
-        setLocationRelativeTo(null); // Centra el JFrame en la pantalla
-    }
 
-    private void inicializarTabla(List<Producto> productos) {
-        // No es necesario comprobar si productosModel es null.
-        productosModel.setRowCount(0); // Limpiar el modelo antes de llenarlo
-
-        for (Producto producto : productos) {
-            productosModel.addRow(new Object[]{producto.getId(), producto.getNombre(), producto.getStock()});
-        }
+        initComponents();
 
         tblProductos.setModel(productosModel);
         tblProductos.setDefaultRenderer(Object.class, new ProductosRenderer());
+
+        setLocationRelativeTo(null); // Centra la ventana
     }
 
+//    private void inicializarTabla(List<Producto> productos) {
+//        // No es necesario comprobar si productosModel es null.
+//        productosModel.setRowCount(0); // Limpiar el modelo antes de llenarlo
+//
+//        for (Producto producto : productos) {
+//            productosModel.addRow(new Object[]{producto.getId(), producto.getNombre(), producto.getStock()});
+//        }
+//
+//        tblProductos.setModel(productosModel);
+//        tblProductos.setDefaultRenderer(Object.class, new ProductosRenderer());
+//    }
     private void filterTable() {
         String filter = jTextField1.getText();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(productosModel);
         tblProductos.setRowSorter(sorter);
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filter)); // Filtro sin considerar mayúsculas
     }
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -216,15 +215,13 @@ public class FrmControlExistencias extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-      ControlPersistencia control = new ControlPersistencia();
+        ControlPersistencia control = new ControlPersistencia();
         List<Categoria> categorias = control.obtenerListaCategorias(); // Cambia según tu implementación
 
-    // Crear una nueva instancia del formulario de agregar productos
-    FrmAgregarProductos ap = new FrmAgregarProductos(categorias);
-    
-    // Hacer visible el formulario
-    ap.setVisible(true);
-    
+        FrmAgregarProductos ap = new FrmAgregarProductos(categorias);
+
+        ap.setVisible(true);
+
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
@@ -239,11 +236,6 @@ public class FrmControlExistencias extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    /**
-     * Metodo para mandar el producto seleccionado a la pantalla de Actualizar
-     *
-     * @return Producto Seleccionado
-     */
     public List<String> seleccionarDato() {
         int filaseleccionada = tblProductos.getSelectedRow();
         if (filaseleccionada == -1) {
@@ -271,7 +263,7 @@ public class FrmControlExistencias extends javax.swing.JFrame {
     private javax.swing.JLabel lblExistencias;
     private javax.swing.JTable tblProductos;
     // End of variables declaration//GEN-END:variables
-private static class ProductosRenderer extends DefaultTableCellRenderer {
+ private static class ProductosRenderer extends DefaultTableCellRenderer {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
