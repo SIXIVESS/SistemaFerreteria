@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dominio;
 
-/**
- *
- * @author chaly
- */
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
+
 public class Usuario {
 
     private Integer id;
@@ -21,13 +17,25 @@ public class Usuario {
     public Usuario(Integer id, String nombreUsuario, String contrasena, String fechaRegistro) {
         this.id = id;
         this.nombreUsuario = nombreUsuario;
-        this.contrasena = contrasena;
+        this.contrasena = hashearContrasena(contrasena);
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public Usuario(Integer id, String nombreUsuario, String contrasena) {
+        this.id = id;
+        this.nombreUsuario = nombreUsuario;
+        this.contrasena = contrasena;
+    }
+
+    public Usuario(String nombreUsuario, String contrasena) {
+        this.nombreUsuario = nombreUsuario;
+        this.contrasena = hashearContrasena(contrasena);
+    
     }
 
     public Usuario(String nombreUsuario, String contrasena, String fechaRegistro) {
         this.nombreUsuario = nombreUsuario;
-        this.contrasena = contrasena;
+        this.contrasena = hashearContrasena(contrasena);
         this.fechaRegistro = fechaRegistro;
     }
 
@@ -52,7 +60,7 @@ public class Usuario {
     }
 
     public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
+        this.contrasena = hashearContrasena(contrasena); // Actualizar la contraseña hasheada
     }
 
     public String getFechaRegistro() {
@@ -63,19 +71,48 @@ public class Usuario {
         this.fechaRegistro = fechaRegistro;
     }
 
+    // Método para hashear la contraseña
+    private String hashearContrasena(String contrasena) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(contrasena.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public String toString() {
-        return super.toString(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        return "Usuario{"
+                + "id=" + id
+                + ", nombreUsuario='" + nombreUsuario + '\''
+                + ", fechaRegistro='" + fechaRegistro + '\''
+                + '}';
     }
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Usuario)) {
+            return false;
+        }
+        Usuario usuario = (Usuario) obj;
+        return Objects.equals(nombreUsuario, usuario.nombreUsuario);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        return Objects.hash(nombreUsuario);
     }
-
 }

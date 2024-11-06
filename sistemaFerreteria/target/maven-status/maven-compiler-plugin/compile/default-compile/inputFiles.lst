@@ -12,6 +12,7 @@ C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\excepci
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\vista\FrmLogin.java
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\interfaces\ICategoriaDAO.java
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\interfaces\IVentaDAO.java
+C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\vista\FrmRegister.java
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\interfaces\IDetalleVentaDAO.java
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\vista\FrmActualizarProductos.java
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\dao\DetalleVentaDAO.java
@@ -21,6 +22,7 @@ C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\interfa
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\dominio\Usuario.java
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\control\ControlPersistencia.java
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\dominio\Producto.java
+C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\excepciones\HashUtil.java
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\dominio\DetalleVenta.java
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\vista\FrmGenerarReporte.java
 C:\Users\chaly\Desktop\SistemaFerreteria\sistemaFerreteria\src\main\java\vista\FrmStockBajo.java

@@ -1,6 +1,7 @@
 vista\FrmControlExistencias$ProductosRenderer.class
 vista\FrmAgregarProductos$3.class
 vista\FrmStockBajo.class
+excepciones\HashUtil.class
 vista\FrmActualizarProductos$4.class
 vista\FrmRegister$1.class
 vista\FrmControlExistencias.class

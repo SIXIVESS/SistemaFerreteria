@@ -4,18 +4,45 @@
  */
 package vista;
 
+import dao.UsuarioDAO;
+import db.ConexionDB;
+import dominio.Usuario;
+import excepciones.DAOException;
+import interfaces.IConexionDB;
+import interfaces.IUsuarioDAO;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author chaly
  */
 public class FrmRegister extends JFrame {
-    
+
+    private IConexionDB conexion;
+    private IUsuarioDAO usuarioDAO;
+
     public FrmRegister(JFrame parent) {
         initComponents();
-         setLocationRelativeTo(parent);
+        setLocationRelativeTo(parent);
+        this.conexion = ConexionDB.getInstance();
+        this.usuarioDAO = new UsuarioDAO(conexion);
+    }
+
+    public void registrarNuevoUsuario(String nombre, String contrasena) {
+        // Crear nuevo usuario
+        Usuario nuevoUsuario = new Usuario(nombre, contrasena);
+        usuarioDAO.insertar(nuevoUsuario);
+
+        try {
+            // Usar el método insertar de usuarioDAO
+            usuarioDAO.insertar(nuevoUsuario);
+            System.out.println("Usuario registrado con ID: " + nuevoUsuario.getId());
+        } catch (DAOException e) {
+            // Manejar cualquier excepción que pueda surgir al insertar el usuario
+            System.err.println("Error al registrar el usuario: " + e.getMessage());
+        }
     }
 
     /**
@@ -170,7 +197,31 @@ public class FrmRegister extends JFrame {
     }//GEN-LAST:event_txtNombreUsuarioActionPerformed
 
     private void btnRegisterLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterLoginActionPerformed
-       
+        String nombreUsuario = txtNombreUsuario.getText();
+        String contrasena = new String(txtContrasena.getPassword());
+        String contrasenaConfirmada = new String(txtContrasena1.getPassword());
+
+        if (nombreUsuario.isEmpty() || contrasena.isEmpty() || contrasenaConfirmada.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!contrasena.equals(contrasenaConfirmada)) {
+            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden. Por favor, intente nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            registrarNuevoUsuario(nombreUsuario, contrasena);
+            JOptionPane.showMessageDialog(this, "Usuario registrado exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            this.dispose();
+
+            FrmLogin frmLogin = new FrmLogin(this);
+            frmLogin.setVisible(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al registrar el usuario: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnRegisterLoginActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -193,4 +244,5 @@ public class FrmRegister extends JFrame {
     private javax.swing.JPasswordField txtContrasena1;
     private javax.swing.JTextField txtNombreUsuario;
     // End of variables declaration//GEN-END:variables
+
 }

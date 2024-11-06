@@ -30,6 +30,34 @@ public class UsuarioDAO implements IUsuarioDAO {
     public UsuarioDAO(IConexionDB manejador) {
         this.MANAGER = manejador;
     }
+    
+    /**
+     *
+     * @param nombreUsuario
+     * @return
+     * @throws SQLException
+     */
+    @Override
+     public Usuario obtenerUsuarioPorNombre(String nombreUsuario) throws DAOException {
+            String query = "SELECT UsuarioID, NombreUsuario, Contrasena FROM Usuarios WHERE NombreUsuario = ?";
+
+        try (PreparedStatement stmt = MANAGER.crearConexion().prepareStatement(query)) {
+            stmt.setString(1, nombreUsuario);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getInt("UsuarioID")); // Usa "UsuarioID" en lugar de "id"
+                usuario.setNombreUsuario(rs.getString("NombreUsuario"));
+                usuario.setContrasena(rs.getString("Contrasena"));
+                return usuario;
+            }
+        }
+    }   catch (SQLException ex) {
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    return null;
+    }
+
 
     @Override
     public Usuario obtener(Integer id) throws DAOException {
@@ -59,26 +87,23 @@ public class UsuarioDAO implements IUsuarioDAO {
     @Override
     public Usuario insertar(Usuario usuario) throws DAOException {
         String sql = "INSERT INTO usuarios(NombreUsuario, Contrasena) VALUES(?, ?)";
-
-        try (
-                Connection conexion = MANAGER.crearConexion(); PreparedStatement comando = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+        try (Connection conexion = MANAGER.crearConexion(); PreparedStatement comando = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             comando.setString(1, usuario.getNombreUsuario());
             comando.setString(2, usuario.getContrasena());
             comando.executeUpdate();
 
-            ResultSet registroLlaves = comando.getGeneratedKeys();
-
-            if (registroLlaves.next()) {
-                Integer id = registroLlaves.getInt(1);
-                usuario.setId(id);
-                return usuario;
-            } else {
-                LOG.log(Level.SEVERE, "No se mostró el ID");
-                throw new DAOException("No se mostró el ID");
+            try (ResultSet registroLlaves = comando.getGeneratedKeys()) {
+                if (registroLlaves.next()) {
+                    usuario.setId(registroLlaves.getInt(1));
+                    return usuario;
+                } else {
+                    LOG.log(Level.SEVERE, "No se mostró el ID");
+                    throw new DAOException("No se mostró el ID");
+                }
             }
         } catch (SQLException sqle) {
             LOG.log(Level.SEVERE, "No se pudo insertar el usuario: {0}", sqle.getMessage());
-            throw new DAOException("No se pudo insertar el usuario: " + sqle.getMessage());
+            throw new DAOException("Error al insertar el usuario: " + sqle.getMessage());
         }
     }
 
@@ -149,7 +174,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public boolean validar(String nombreUsuario, String contrasena) throws DAOException {
+    public boolean validarUsuario(String nombreUsuario, String contrasena) throws DAOException {
         String query = "SELECT COUNT(*) FROM usuarios WHERE NombreUsuario = ? AND contrasena = ?"; // Asegúrate de que los nombres son correctos
         try (Connection conexion = MANAGER.crearConexion(); PreparedStatement comando = conexion.prepareStatement(query)) {
 

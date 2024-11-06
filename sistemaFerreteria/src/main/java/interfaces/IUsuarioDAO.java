@@ -58,6 +58,9 @@ public interface IUsuarioDAO {
      */
 String actualizar(String contrasena, int id) throws DAOException; 
 
-boolean validar(String usuario, String contrasena) throws DAOException;
+Usuario obtenerUsuarioPorNombre(String nombreUsuario);
 
+boolean validarUsuario(String nombreUsuario, String contrasena) throws DAOException;
+
+   
 }
