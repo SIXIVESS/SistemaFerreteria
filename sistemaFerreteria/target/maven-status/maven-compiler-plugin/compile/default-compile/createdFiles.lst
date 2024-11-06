@@ -14,7 +14,6 @@ dao\VentaDAO.class
 dominio\Usuario.class
 dominio\Producto.class
 vista\FrmRegister.class
-vista\FrmRegistroUsuario.class
 interfaces\IConexionDB.class
 vista\FrmActualizarProductos.class
 vista\FrmLogin$2.class
@@ -23,7 +22,6 @@ interfaces\ICategoriaDAO.class
 vista\FrmMenuPrincipal$1.class
 dominio\Categoria.class
 vista\FrmControlExistencias$1.class
-vista\FrmRegistroUsuario$1$1.class
 vista\FrmRegister$2.class
 vista\FrmActualizarProductos$2.class
 vista\FrmRegistroVentas.class
@@ -48,6 +46,5 @@ vista\FrmActualizarProductos$3.class
 dao\CategoriaDAO.class
 control\ControlPersistencia.class
 vista\FrmLogin$3.class
-vista\FrmRegistroUsuario$1.class
 vista\FrmControlExistencias$3.class
 dao\ProductoDAO.class

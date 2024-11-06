@@ -174,22 +174,26 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public boolean validarUsuario(String nombreUsuario, String contrasena) throws DAOException {
-        String query = "SELECT COUNT(*) FROM usuarios WHERE NombreUsuario = ? AND contrasena = ?"; // Asegúrate de que los nombres son correctos
-        try (Connection conexion = MANAGER.crearConexion(); PreparedStatement comando = conexion.prepareStatement(query)) {
+public boolean validarUsuario(String nombreUsuario, String contrasena) throws DAOException {
+    String query = "SELECT COUNT(*) FROM usuarios WHERE NombreUsuario = ? AND contrasena = ?";
+    try (Connection conexion = MANAGER.crearConexion(); 
+         PreparedStatement comando = conexion.prepareStatement(query)) {
 
-            comando.setString(1, nombreUsuario); // Asegúrate de que este argumento corresponde con la variable que usas en el formulario
-            comando.setString(2, contrasena);
+        comando.setString(1, nombreUsuario);
+        comando.setString(2, contrasena);
 
-            ResultSet rs = comando.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0; // Retorna true si hay al menos un usuario que coincide
-            }
-        } catch (SQLException e) {
-            LOG.log(Level.SEVERE, "Error al validar usuario: {0}", e.getMessage());
-            throw new DAOException("Error al validar usuario: " + e.getMessage());
+        ResultSet rs = comando.executeQuery();
+        if (rs.next()) {
+            int count = rs.getInt(1);
+            LOG.log(Level.INFO, "Número de coincidencias encontradas: {0}", count);
+            return count > 0;
         }
-        return false; // Por defecto, retornar false
+    } catch (SQLException e) {
+        LOG.log(Level.SEVERE, "Error al validar usuario: {0}", e.getMessage());
+        throw new DAOException("Error al validar usuario: " + e.getMessage());
     }
+    LOG.log(Level.INFO, "No se encontró el usuario {0} con la contraseña proporcionada.", nombreUsuario);
+    return false;
+}
 
 }
