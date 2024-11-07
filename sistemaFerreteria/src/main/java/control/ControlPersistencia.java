@@ -8,7 +8,8 @@ import db.ConexionDB;
 import dominio.Categoria;
 import dominio.Producto;
 import dominio.Usuario;
-import excepciones.HashUtil;
+import excepciones.DAOException;
+import util.HashUtil;
 import interfaces.ICategoriaDAO;
 import interfaces.IConexionDB;
 import interfaces.IProductoDAO;
@@ -109,6 +110,20 @@ public class ControlPersistencia {
             return "Error al actualizar producto"; // Mensaje por defecto
         }
     }
+    
+    public void registrarNuevoUsuario(String nombre, String contrasena) {
+        // Crear nuevo usuario
+        Usuario nuevoUsuario = new Usuario(nombre, contrasena);
+
+        try {
+            // Usar el método insertar de usuarioDAO
+            usuarioDAO.insertar(nuevoUsuario);
+            System.out.println("Usuario registrado con ID: " + nuevoUsuario.getId());
+        } catch (DAOException e) {
+            // Manejar cualquier excepción que pueda surgir al insertar el usuario
+            System.err.println("Error al registrar el usuario: " + e.getMessage());
+        }
+    }
 
     /**
      * Actualiza la contraseña de un usuario.
@@ -126,7 +141,7 @@ public class ControlPersistencia {
         }
     }
     
-public boolean validarUsuario(String nombreUsuario, String contrasena) {
+    public boolean validarUsuario(String nombreUsuario, String contrasena) {
         Usuario usuarioBD = usuarioDAO.obtenerUsuarioPorNombre(nombreUsuario);
         if (usuarioBD == null) {
             return false; // Usuario no encontrado

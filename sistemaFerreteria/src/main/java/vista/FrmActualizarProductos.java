@@ -21,7 +21,7 @@ public class FrmActualizarProductos extends javax.swing.JFrame {
     public FrmActualizarProductos(List<String> dato) {
         initComponents();
         
-         producto = new Producto();
+        producto = new Producto();
         producto.setId(Integer.valueOf(dato.get(0)));
         producto.setNombre(dato.get(1));
         producto.setPrecio(Float.valueOf(dato.get(2)));
@@ -106,10 +106,6 @@ public class FrmActualizarProductos extends javax.swing.JFrame {
         jLabel5.setText("Categoría");
 
         txtId.setEditable(false);
-
-        txtNombre.setEditable(false);
-
-        txtPrecio.setEditable(false);
 
         txtStock.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -249,18 +245,18 @@ public class FrmActualizarProductos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-         if (this.verificarCampos()) {
-           String resultado = control.actualizarProducto(Integer.parseInt(txtStock.getText()),Integer.parseInt(txtId.getText()));
-            JOptionPane.showMessageDialog(null,resultado);
-             limpiarCampos(); 
+        if(!this.verificarCampos()) {
+            JOptionPane.showMessageDialog(this, "Debe llenar el campo Stock correctamente");
+            return;
+        }
+        
+        String resultado = control.actualizarProducto(Integer.parseInt(txtStock.getText()),Integer.parseInt(txtId.getText()));
+        JOptionPane.showMessageDialog(null,resultado);
+        limpiarCampos();
         
         FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
         ce.setVisible(true);
         dispose();
-        }
-        else {
-            JOptionPane.showMessageDialog(this, "Debe llenar el campo Stock correctamente");
-        }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed

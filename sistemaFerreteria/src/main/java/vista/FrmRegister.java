@@ -4,13 +4,7 @@
  */
 package vista;
 
-import dao.UsuarioDAO;
-import db.ConexionDB;
-import dominio.Usuario;
-import excepciones.DAOException;
-import interfaces.IConexionDB;
-import interfaces.IUsuarioDAO;
-import javax.swing.JDialog;
+import control.ControlPersistencia;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -19,30 +13,11 @@ import javax.swing.JOptionPane;
  * @author chaly
  */
 public class FrmRegister extends JFrame {
-
-    private IConexionDB conexion;
-    private IUsuarioDAO usuarioDAO;
+    private ControlPersistencia control = new ControlPersistencia();
 
     public FrmRegister(JFrame parent) {
         initComponents();
         setLocationRelativeTo(parent);
-        this.conexion = ConexionDB.getInstance();
-        this.usuarioDAO = new UsuarioDAO(conexion);
-    }
-
-    public void registrarNuevoUsuario(String nombre, String contrasena) {
-        // Crear nuevo usuario
-        Usuario nuevoUsuario = new Usuario(nombre, contrasena);
-        usuarioDAO.insertar(nuevoUsuario);
-
-        try {
-            // Usar el método insertar de usuarioDAO
-            usuarioDAO.insertar(nuevoUsuario);
-            System.out.println("Usuario registrado con ID: " + nuevoUsuario.getId());
-        } catch (DAOException e) {
-            // Manejar cualquier excepción que pueda surgir al insertar el usuario
-            System.err.println("Error al registrar el usuario: " + e.getMessage());
-        }
     }
 
     /**
@@ -71,11 +46,6 @@ public class FrmRegister extends JFrame {
         jPanel1.setBackground(new java.awt.Color(243, 233, 207));
 
         txtNombreUsuario.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        txtNombreUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreUsuarioActionPerformed(evt);
-            }
-        });
 
         txtContrasena.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
@@ -83,7 +53,6 @@ public class FrmRegister extends JFrame {
         btnRegisterLogin.setFont(new java.awt.Font("Microsoft Tai Le", 1, 18)); // NOI18N
         btnRegisterLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnRegisterLogin.setText("Registrarse");
-        btnRegisterLogin.setActionCommand("Registrarse");
         btnRegisterLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegisterLoginActionPerformed(evt);
@@ -192,10 +161,6 @@ public class FrmRegister extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreUsuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreUsuarioActionPerformed
-
     private void btnRegisterLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterLoginActionPerformed
         String nombreUsuario = txtNombreUsuario.getText();
         String contrasena = new String(txtContrasena.getPassword());
@@ -212,7 +177,7 @@ public class FrmRegister extends JFrame {
         }
 
         try {
-            registrarNuevoUsuario(nombreUsuario, contrasena);
+            control.registrarNuevoUsuario(nombreUsuario, contrasena);
             JOptionPane.showMessageDialog(this, "Usuario registrado exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
             this.dispose();

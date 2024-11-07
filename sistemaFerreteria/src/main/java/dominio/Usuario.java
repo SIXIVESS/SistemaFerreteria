@@ -60,7 +60,7 @@ public class Usuario {
     }
 
     public void setContrasena(String contrasena) {
-        this.contrasena = hashearContrasena(contrasena); // Actualizar la contraseña hasheada
+        this.contrasena = contrasena;
     }
 
     public String getFechaRegistro() {

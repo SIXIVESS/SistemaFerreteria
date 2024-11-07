@@ -7,6 +7,7 @@ package vista;
  */
 import control.ControlPersistencia;
 import dominio.Producto;
+import util.HashUtil;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -200,31 +201,34 @@ public class FrmLogin extends JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         String nombreUsuario = txtNombreUsuario.getText();
-    String contrasena = new String(txtContrasena.getPassword());
+        String contrasena = new String(txtContrasena.getPassword());
 
-    ControlPersistencia control = new ControlPersistencia();
-    try {
-        if (control.validarUsuario(nombreUsuario, contrasena)) {
-            JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
-
-            List<Producto> productos = control.obtenerListaProductos();
-            FrmControlExistencias controlExistencias = new FrmControlExistencias(productos);
-            controlExistencias.setVisible(true);
-
-            this.dispose(); // Cierra el formulario de login
-
-            if (menuPrincipal != null) {
-                menuPrincipal.dispose();
+        ControlPersistencia control = new ControlPersistencia();
+        try {
+            if(nombreUsuario.isEmpty() || contrasena.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
+                return;
             }
-        } else if (nombreUsuario.isEmpty() || contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
-        } else {
-            JOptionPane.showMessageDialog(this, "Nombre de usuario o contraseña incorrectos");
+            
+            if (control.validarUsuario(nombreUsuario, contrasena)) {
+                JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
+
+                List<Producto> productos = control.obtenerListaProductos();
+                FrmControlExistencias controlExistencias = new FrmControlExistencias(productos);
+                controlExistencias.setVisible(true);
+
+                this.dispose(); // Cierra el formulario de login
+
+                if (menuPrincipal != null) {
+                    menuPrincipal.dispose();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Nombre de usuario o contraseña incorrectos");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroActionPerformed

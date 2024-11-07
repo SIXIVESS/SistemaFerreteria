@@ -154,6 +154,14 @@ public class UsuarioDAO implements IUsuarioDAO {
         }
     }
 
+    /**
+     *
+     * @param contrasena
+     * @param id
+     * @return
+     * @throws DAOException
+     */
+    @Override
     public String actualizar(String contrasena, int id) throws DAOException {
         try (
                 Connection conexion = MANAGER.crearConexion(); PreparedStatement comando = conexion.prepareStatement("UPDATE usuarios SET Contrasena = ? WHERE UsuarioID = ?");) {
@@ -174,26 +182,26 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-public boolean validarUsuario(String nombreUsuario, String contrasena) throws DAOException {
-    String query = "SELECT COUNT(*) FROM usuarios WHERE NombreUsuario = ? AND contrasena = ?";
-    try (Connection conexion = MANAGER.crearConexion(); 
-         PreparedStatement comando = conexion.prepareStatement(query)) {
+    public boolean validarUsuario(String nombreUsuario, String contrasena) throws DAOException {
+        String query = "SELECT COUNT(*) FROM usuarios WHERE NombreUsuario = ? AND contrasena = ?";
+        try (Connection conexion = MANAGER.crearConexion(); 
+             PreparedStatement comando = conexion.prepareStatement(query)) {
 
-        comando.setString(1, nombreUsuario);
-        comando.setString(2, contrasena);
+            comando.setString(1, nombreUsuario);
+            comando.setString(2, contrasena);
 
-        ResultSet rs = comando.executeQuery();
-        if (rs.next()) {
-            int count = rs.getInt(1);
-            LOG.log(Level.INFO, "Número de coincidencias encontradas: {0}", count);
-            return count > 0;
+            ResultSet rs = comando.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                LOG.log(Level.INFO, "Número de coincidencias encontradas: {0}", count);
+                return count > 0;
+            }
+        } catch (SQLException e) {
+            LOG.log(Level.SEVERE, "Error al validar usuario: {0}", e.getMessage());
+            throw new DAOException("Error al validar usuario: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        LOG.log(Level.SEVERE, "Error al validar usuario: {0}", e.getMessage());
-        throw new DAOException("Error al validar usuario: " + e.getMessage());
+        LOG.log(Level.INFO, "No se encontró el usuario {0} con la contraseña proporcionada.", nombreUsuario);
+        return false;
     }
-    LOG.log(Level.INFO, "No se encontró el usuario {0} con la contraseña proporcionada.", nombreUsuario);
-    return false;
-}
 
 }
