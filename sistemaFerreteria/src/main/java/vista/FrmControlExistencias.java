@@ -1,31 +1,40 @@
 package vista;
 
 import control.ControlPersistencia;
+import dominio.Categoria;
 import dominio.Producto;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
  * @author chaly
  */
 public class FrmControlExistencias extends javax.swing.JFrame {
-    private ControlPersistencia control = new ControlPersistencia();
+private ControlPersistencia control = new ControlPersistencia();
     private DefaultTableModel productosModel;
+     private List<Categoria> categorias;
     
-    /**
-     * Creates new form FrmControlExistencias.
-     * @param productos Productos a mostrar en la tabla.
-     */
-    public FrmControlExistencias(List<Producto> productos) {
+       public FrmControlExistencias(List<Producto> productos) {
         this.productosModel = new DefaultTableModel();
-        
+
         productosModel.addColumn("ID");
         productosModel.addColumn("Nombre");
         productosModel.addColumn("Precio");
         productosModel.addColumn("Stock actual");
         productosModel.addColumn("Categoría");
-        
         for (Producto producto : productos) {
             productosModel.addRow(new Object[]{
                 producto.getId(),
@@ -35,9 +44,11 @@ public class FrmControlExistencias extends javax.swing.JFrame {
                 producto.getId_categoria()
             });
         }
+            initComponents();
         
-        initComponents();
+        tblProductos.setDefaultRenderer(Object.class, new ProductosRenderer());
     }
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,6 +66,7 @@ public class FrmControlExistencias extends javax.swing.JFrame {
         lblExistencias = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -91,10 +103,20 @@ public class FrmControlExistencias extends javax.swing.JFrame {
         btnRegresar.setBackground(new java.awt.Color(231, 111, 81));
         btnRegresar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
         btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegresar.setText("Regresar");
+        btnRegresar.setText("Cerrar sesión");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegresarActionPerformed(evt);
+            }
+        });
+
+        btnAgregar.setBackground(new java.awt.Color(42, 157, 143));
+        btnAgregar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
             }
         });
 
@@ -114,15 +136,17 @@ public class FrmControlExistencias extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(133, 133, 133)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnActualizar)
+                        .addComponent(btnAgregar)
                         .addGap(18, 18, 18)
+                        .addComponent(btnActualizar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRegresar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(136, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,6 +159,7 @@ public class FrmControlExistencias extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegresar)
+                    .addComponent(btnAgregar)
                     .addComponent(btnActualizar))
                 .addContainerGap(77, Short.MAX_VALUE))
         );
@@ -170,14 +195,47 @@ public class FrmControlExistencias extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        FrmAgregarProductos ap = new FrmAgregarProductos(control.obtenerListaCategorias());
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        ControlPersistencia control = new ControlPersistencia();
+        List<Categoria> categorias = control.obtenerListaCategorias();
+
+        FrmAgregarProductos ap = new FrmAgregarProductos(categorias);
+
         ap.setVisible(true);
-        dispose();
+
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        if(seleccionarDato() != null) {
+            FrmActualizarProductos ap = new FrmActualizarProductos(seleccionarDato());
+            ap.setVisible(true);
+            dispose();
+        }
+    
+    
     }//GEN-LAST:event_btnActualizarActionPerformed
+  public List<String> seleccionarDato() {
+        int filaseleccionada;
+        List<String> datos = new ArrayList<>(5);
+
+        filaseleccionada = tblProductos.getSelectedRow();
+        if (filaseleccionada == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un Producto");
+            return null;
+        } else {
+            DefaultTableModel tabla = (DefaultTableModel) tblProductos.getModel();
+            for (int i = 0; i < tabla.getColumnCount(); i++) {
+                Object valor = tabla.getValueAt(filaseleccionada, i);
+                datos.add(valor.toString());
+            }
+        }
+        return datos;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -186,4 +244,22 @@ public class FrmControlExistencias extends javax.swing.JFrame {
     private javax.swing.JLabel lblExistencias;
     private javax.swing.JTable tblProductos;
     // End of variables declaration//GEN-END:variables
+ 
+    private static class ProductosRenderer extends DefaultTableCellRenderer {
+        
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            
+            int stock = (int) table.getValueAt(row, 3);
+            
+            if(stock <= 3) {
+                comp.setForeground(Color.RED);
+            }else {
+                comp.setForeground(Color.BLACK);
+            }
+            
+            return comp;
+        }
+    }
 }

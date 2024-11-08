@@ -23,7 +23,7 @@ public class CategoriaDAOIT {
     
     @BeforeAll
     public static void setUpClass() throws Exception {
-        conexionDB = new IConexionDB() {
+        conexionDB = new IConexionDB(){
             @Override
             public Connection crearConexion() throws SQLException {
                 return java.sql.DriverManager.getConnection("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "root", "");

@@ -1,15 +1,13 @@
 package main;
 
+import vista.FrmLogin;
 import vista.FrmMenuPrincipal;
 
-/**
- *
- * @author chaly
- */
 public class SistemaFerreteria {
 
     public static void main(String[] args) {
-        FrmMenuPrincipal main = new FrmMenuPrincipal();
-        main.setVisible(true);
+        FrmMenuPrincipal menuPrincipal = new FrmMenuPrincipal();
+        menuPrincipal.setVisible(true);
+
     }
 }
