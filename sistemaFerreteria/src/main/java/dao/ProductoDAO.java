@@ -196,5 +196,34 @@ public class ProductoDAO implements IProductoDAO {
         } 
         
     }
+    @Override
+     public List<Producto> consultarListaBajoStock() throws DAOException {
+        String sql = "select *  from productos where stock <= 3;";
+        List<Producto> listaProductos = new LinkedList<>();
+        
+        try(
+            Connection conexion = MANAGER.crearConexion();
+            PreparedStatement comando = conexion.prepareStatement(sql);
+        ) {
+            ResultSet resultado = comando.executeQuery();
+            
+            while(resultado.next()) {
+                Integer id = resultado.getInt("ProductoID");
+                String nombre = resultado.getString("Nombre");
+                String descripcion = resultado.getString("Descripcion");
+                Float precio = resultado.getFloat("Precio");
+                Integer stock = resultado.getInt("Stock");
+                Integer id_categoria = resultado.getInt("CategoriaID");
+                Producto producto = new Producto(id, nombre, descripcion, precio, stock, id_categoria);
+                
+                listaProductos.add(producto);
+            }
+            
+            return listaProductos;
+        } catch(SQLException sqle) {
+            LOG.log(Level.SEVERE, "No se pudo consultar la lista de productos" + "{0}", sqle.getMessage());
+            throw new DAOException("No se pudo consultar la lista de productos" + sqle.getMessage());
+        }
+    }
     
 }

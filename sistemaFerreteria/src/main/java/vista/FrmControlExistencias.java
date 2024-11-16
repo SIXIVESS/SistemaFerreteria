@@ -1,33 +1,35 @@
 package vista;
 
 import control.ControlPersistencia;
+import control.Notificaciones;
 import dominio.Categoria;
 import dominio.Producto;
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFrame;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.RowFilter;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
+
 
 /**
  *
  * @author chaly
  */
-public class FrmControlExistencias extends javax.swing.JFrame {
+public final class FrmControlExistencias extends javax.swing.JFrame {
 private ControlPersistencia control = new ControlPersistencia();
     private DefaultTableModel productosModel;
-     private List<Categoria> categorias;
+    private List<Categoria> categorias;
+    public static String msj="";
+    public static boolean notif = false;
     
-       public FrmControlExistencias(List<Producto> productos) {
+    
+    public FrmControlExistencias(List<Producto> productos) {
         this.productosModel = new DefaultTableModel();
 
         productosModel.addColumn("ID");
@@ -48,6 +50,8 @@ private ControlPersistencia control = new ControlPersistencia();
             initComponents();
         
         tblProductos.setDefaultRenderer(Object.class, new ProductosRenderer());
+        mostrarNotificacion(); 
+              
     }
    
 
@@ -256,11 +260,30 @@ private ControlPersistencia control = new ControlPersistencia();
             
             if(stock <= 3) {
                 comp.setForeground(Color.RED);
-            }else {
-                comp.setForeground(Color.BLACK);
             }
-            
+
+            else {
+                    comp.setForeground(Color.BLACK);
+                    }        
             return comp;
-        }
+        } 
+     }
+    
+    public void mostrarNotificacion(){
+       List<Producto> productos = control.obtenerListaProductosBajoStock();
+        if (!productos.isEmpty()){
+ 
+              Notificaciones n = new Notificaciones();
+              msj ="";
+              for(int i = 0; i <= productos.size()-1;i++){
+                   msj += productos.get(i).getNombre() + "\n";}
+ 
+         try {n.mje(); } catch (AWTException ex) {   Logger.getLogger(FrmControlExistencias.class.getName()).log(Level.SEVERE, null, ex);}  
+      }
+      else{
+          
+      }
     }
+  
+    
 }

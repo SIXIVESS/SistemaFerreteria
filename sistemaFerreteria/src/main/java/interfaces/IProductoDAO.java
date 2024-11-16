@@ -49,4 +49,10 @@ public interface IProductoDAO {
      * @throws DAOException 
      */
     String actualizar(int stock, int id) throws DAOException;
+    /**
+     * 
+     * @return lista de productos con stock bajo
+     * @throws DAOException 
+     */
+    public List<Producto> consultarListaBajoStock()throws DAOException;
 }

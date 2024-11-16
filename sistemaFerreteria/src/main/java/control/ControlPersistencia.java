@@ -94,6 +94,18 @@ public class ControlPersistencia {
             return List.of(); // Retorna una lista vacía en caso de error
         }
     }
+    /**
+     * 
+     * @return 
+     */
+        public List<Producto> obtenerListaProductosBajoStock() {
+        try {
+            return productoDAO.consultarListaBajoStock();
+        } catch (Exception e) {
+            System.err.println("Error al obtener productos: " + e.getMessage());
+            return List.of(); // Retorna una lista vacía en caso de error
+        }
+    }
 
     /**
      * Actualiza el stock de un producto.
