@@ -104,6 +104,12 @@ public class Notificaciones {
            
             if (Notificaciones.band) {
                 timer.cancel();
+             try {
+            Thread.sleep(3000); 
+        } catch (InterruptedException e) {
+            e.printStackTrace();}
+        
+          systemtray.remove(trayIcon);
             } else {
                     prod += " " + FrmControlExistencias.msj;
                 notificacion();
@@ -120,7 +126,8 @@ public class Notificaciones {
     public void mje() throws AWTException {
         Notificaciones.band = false;
         timer = new Timer();
-        timer.schedule(new MyTimerTask(), 0, 100000);
+        timer.schedule(new MyTimerTask(), 0, 20000);
+        
     }
 }
 
