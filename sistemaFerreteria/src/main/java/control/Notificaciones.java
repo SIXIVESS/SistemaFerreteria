@@ -73,7 +73,7 @@ public class Notificaciones {
                 band = true;
             };
           
-            MenuItem SalirItem = new MenuItem("Salir");
+            MenuItem SalirItem = new MenuItem("Confirmacion");
             SalirItem.addActionListener(salir);
             popup.add(SalirItem);
 
