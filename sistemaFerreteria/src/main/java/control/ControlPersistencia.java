@@ -17,8 +17,8 @@ import interfaces.IUsuarioDAO;
 import java.util.List;
 
 /**
- * Lleva el control de las funciones de persistencia del sistema.
- * Controla las operaciones relacionadas con Usuarios, Productos y Categorías.
+ * Lleva el control de las funciones de persistencia del sistema. Controla las
+ * operaciones relacionadas con Usuarios, Productos y Categorías.
  */
 public class ControlPersistencia {
 
@@ -34,10 +34,10 @@ public class ControlPersistencia {
         this.productoDAO = new ProductoDAO(conexion);
         this.categoriaDAO = new CategoriaDAO(conexion);
     }
-    
+
     public IConexionDB getConexion() {
-    return this.conexion;
-}
+        return this.conexion;
+    }
 
     /**
      * Agrega un producto a la base de datos que se define en la ventana de
@@ -98,11 +98,12 @@ public class ControlPersistencia {
             return List.of(); // Retorna una lista vacía en caso de error
         }
     }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-        public List<Producto> obtenerListaProductosBajoStock() {
+    public List<Producto> obtenerListaProductosBajoStock() {
         try {
             return productoDAO.consultarListaBajoStock();
         } catch (Exception e) {
@@ -126,7 +127,7 @@ public class ControlPersistencia {
             return "Error al actualizar producto"; // Mensaje por defecto
         }
     }
-    
+
     public void registrarNuevoUsuario(String nombre, String contrasena) {
         // Crear nuevo usuario
         Usuario nuevoUsuario = new Usuario(nombre, contrasena);
@@ -156,7 +157,7 @@ public class ControlPersistencia {
             return "Error al actualizar usuario"; // Mensaje por defecto
         }
     }
-    
+
     public boolean validarUsuario(String nombreUsuario, String contrasena) {
         Usuario usuarioBD = usuarioDAO.obtenerUsuarioPorNombre(nombreUsuario);
         if (usuarioBD == null) {

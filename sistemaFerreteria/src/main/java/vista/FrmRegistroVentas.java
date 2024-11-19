@@ -5,27 +5,81 @@
 package vista;
 
 import control.ControlPersistencia;
+import dao.ProductoDAO;
 import dao.VentaDAO;
+import dominio.Producto;
 import dominio.Venta;
 import excepciones.DAOException;
 import interfaces.IConexionDB;
-import java.sql.Date;
+import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
- * @author chaly
+ * @author 
  */
 public class FrmRegistroVentas extends javax.swing.JFrame {
-     private ControlPersistencia control = new ControlPersistencia();
-      private VentaDAO ventaDAO; 
+
+    private ControlPersistencia control = new ControlPersistencia();
+    private VentaDAO ventaDAO;
+    private ProductoDAO productoDAO;
+    private List<Producto> productos;
 
     /**
      * Creates new form FrmRegistrarVentas
      */
     public FrmRegistroVentas(IConexionDB manejador) {
         initComponents();
-         this.ventaDAO = new VentaDAO(manejador);
+        this.ventaDAO = new VentaDAO(manejador);
+        this.productoDAO = new ProductoDAO(manejador);
+        cargarProductos();
+        jDateChooser1.setDate(new Date(System.currentTimeMillis()));
+        SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 100, 1);
+        spnCantidad.setModel(model);
+        //----------------------------------------------------------------------------------------
+        spnCantidad.addChangeListener(e -> {
+            int cantidad = (int) spnCantidad.getValue();
+            actualizarPrecioTotal(cantidad);
+        });
+//----------------------------------------------------------------------------------------
+        cbxNombre.addActionListener(e -> {
+            String nombreProducto = (String) cbxNombre.getSelectedItem();
+            Producto productoSeleccionado = productos.stream()
+                    .filter(p -> p.getNombre().equals(nombreProducto))
+                    .findFirst()
+                    .orElse(null);
+
+            if (productoSeleccionado != null) {
+                int stockDisponible = productoSeleccionado.getStock();
+                spnCantidad.setModel(new SpinnerNumberModel(1, 1, stockDisponible, 1));
+                actualizarPrecioTotal(1);
+            }
+        });
+    }
+
+    private void cargarProductos() {
+        productos = control.obtenerListaProductos();
+        cbxNombre.removeAllItems();
+
+        for (Producto producto : productos) {
+            cbxNombre.addItem(producto.getNombre());
+        }
+    }
+
+    private void actualizarPrecioTotal(int cantidad) {
+        String nombreProducto = (String) cbxNombre.getSelectedItem();
+        Producto productoSeleccionado = productos.stream()
+                .filter(p -> p.getNombre().equals(nombreProducto))
+                .findFirst()
+                .orElse(null);
+
+        if (productoSeleccionado != null) {
+            float precioUnitario = productoSeleccionado.getPrecio();
+            float precioTotal = precioUnitario * cantidad;
+            txtPrecio2.setText(String.valueOf(precioTotal));
+        }
     }
 
     /**
@@ -52,6 +106,8 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
         txtCategoria = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        spnCantidad = new javax.swing.JSpinner();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,14 +144,16 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
         jLabel2.setText("Nombre");
 
         jLabel3.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
-        jLabel3.setText("Precio");
+        jLabel3.setText("Precio total:");
 
         jLabel5.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
         jLabel5.setText("Categoría");
 
         txtID.setEditable(false);
+        txtID.setBackground(new java.awt.Color(215, 215, 205));
 
         txtPrecio2.setEditable(false);
+        txtPrecio2.setBackground(new java.awt.Color(215, 215, 205));
         txtPrecio2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPrecio2KeyTyped(evt);
@@ -130,9 +188,15 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
         });
 
         txtCategoria.setEditable(false);
+        txtCategoria.setBackground(new java.awt.Color(215, 215, 205));
 
         jLabel6.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
         jLabel6.setText("Fecha");
+
+        jDateChooser1.setBackground(new java.awt.Color(215, 215, 205));
+
+        jLabel7.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        jLabel7.setText("Cantidad");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -143,24 +207,30 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(69, 69, 69)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(spnCantidad)
                             .addComponent(txtID)
-                            .addComponent(txtPrecio2)
-                            .addComponent(cbxNombre, 0, 191, Short.MAX_VALUE)
-                            .addComponent(txtCategoria)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(cbxNombre, 0, 235, Short.MAX_VALUE)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtCategoria)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(106, 106, 106)
-                        .addComponent(btnRegistrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                        .addComponent(btnRegresar)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                                .addComponent(txtPrecio2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnRegistrar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnRegresar)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -177,8 +247,8 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
                     .addComponent(cbxNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtPrecio2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spnCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -187,11 +257,15 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(108, 108, 108)
+                .addGap(46, 46, 46)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtPrecio2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(76, 76, 76)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegistrar)
                     .addComponent(btnRegresar))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -210,23 +284,47 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-       Date fecha = new Date(System.currentTimeMillis()); 
-        Float total = Float.parseFloat(txtPrecio2.getText()); 
+        if (txtPrecio2.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El precio no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        java.util.Date utilDate = new java.util.Date();
+        java.sql.Date fecha = new java.sql.Date(utilDate.getTime());
+        Float total;
+        try {
+            total = Float.parseFloat(txtPrecio2.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El precio debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String nombreProducto = (String) cbxNombre.getSelectedItem();
+        Producto productoSeleccionado = productos.stream()
+                .filter(p -> p.getNombre().equals(nombreProducto))
+                .findFirst()
+                .orElse(null);
 
-        // Crear una nueva venta
+        if (productoSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, "Producto no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int cantidad = (int) spnCantidad.getValue();
         Venta venta = new Venta(fecha, total);
 
         try {
-            // Insertar la venta en la base de datos
             ventaDAO.insertar(venta);
+            int nuevoStock = productoSeleccionado.getStock() - cantidad;
+            productoDAO.actualizar(nuevoStock, productoSeleccionado.getId());
             JOptionPane.showMessageDialog(this, "Venta registrada exitosamente!");
+
         } catch (DAOException e) {
             JOptionPane.showMessageDialog(this, "Error al registrar la venta: " + e.getMessage());
         }
-                                              
+
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -244,7 +342,6 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPrecio2KeyTyped
 
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnRegresar;
@@ -255,9 +352,11 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblExistencias;
+    private javax.swing.JSpinner spnCantidad;
     private javax.swing.JTextField txtCategoria;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtPrecio;
