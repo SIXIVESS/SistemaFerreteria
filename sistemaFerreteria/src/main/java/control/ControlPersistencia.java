@@ -34,6 +34,10 @@ public class ControlPersistencia {
         this.productoDAO = new ProductoDAO(conexion);
         this.categoriaDAO = new CategoriaDAO(conexion);
     }
+    
+    public IConexionDB getConexion() {
+    return this.conexion;
+}
 
     /**
      * Agrega un producto a la base de datos que se define en la ventana de

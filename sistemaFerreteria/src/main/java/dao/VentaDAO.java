@@ -25,10 +25,10 @@ public class VentaDAO implements IVentaDAO {
     
     /**
      * Constructo de la clase que inicializa el manejador de la base de datos.
-     * @param manejador Manejador de la base de datos.
+     * @param conexion conexion de la base de datos.
      */
-    public VentaDAO(IConexionDB manejador) {
-        this.MANAGER = manejador;
+    public VentaDAO(IConexionDB conexion) {
+        this.MANAGER = conexion;
     }
     
     /**

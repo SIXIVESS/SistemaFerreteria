@@ -4,6 +4,7 @@ import control.ControlPersistencia;
 import control.Notificaciones;
 import dominio.Categoria;
 import dominio.Producto;
+import interfaces.IConexionDB;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Component;
@@ -73,6 +74,7 @@ private ControlPersistencia control = new ControlPersistencia();
         btnRegresar = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
+        btnRegistroVenta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -135,6 +137,16 @@ private ControlPersistencia control = new ControlPersistencia();
             }
         });
 
+        btnRegistroVenta.setBackground(new java.awt.Color(42, 157, 143));
+        btnRegistroVenta.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        btnRegistroVenta.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistroVenta.setText("Registrar venta");
+        btnRegistroVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistroVentaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -147,6 +159,8 @@ private ControlPersistencia control = new ControlPersistencia();
                         .addComponent(btnAgregar)
                         .addGap(18, 18, 18)
                         .addComponent(btnActualizar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRegistroVenta)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRegresar))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -165,8 +179,9 @@ private ControlPersistencia control = new ControlPersistencia();
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegresar)
                     .addComponent(btnAgregar)
-                    .addComponent(btnActualizar))
-                .addContainerGap(77, Short.MAX_VALUE))
+                    .addComponent(btnActualizar)
+                    .addComponent(btnRegistroVenta))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -182,7 +197,7 @@ private ControlPersistencia control = new ControlPersistencia();
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 544, Short.MAX_VALUE)
+            .addGap(0, 587, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -219,6 +234,13 @@ private ControlPersistencia control = new ControlPersistencia();
     
     
     }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void btnRegistroVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroVentaActionPerformed
+     IConexionDB manejador = control.getConexion(); 
+    FrmRegistroVentas rv = new FrmRegistroVentas(manejador); 
+    rv.setVisible(true);
+    dispose();
+    }//GEN-LAST:event_btnRegistroVentaActionPerformed
   public List<String> seleccionarDato() {
         int filaseleccionada;
         List<String> datos = new ArrayList<>(5);
@@ -241,6 +263,7 @@ private ControlPersistencia control = new ControlPersistencia();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnRegistroVenta;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
