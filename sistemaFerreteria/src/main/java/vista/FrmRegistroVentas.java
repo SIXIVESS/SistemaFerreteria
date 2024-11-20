@@ -1,21 +1,89 @@
-package vista;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+package vista;
+
+import control.ControlPersistencia;
+import dao.DetalleVentaDAO;
+import dao.ProductoDAO;
+import dao.VentaDAO;
+import dominio.DetalleVenta;
+import dominio.Producto;
+import dominio.Venta;
+import excepciones.DAOException;
+import interfaces.IConexionDB;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
- * @author chaly
+ * @author 
  */
-public class FrmRegistroVentas extends javax.swing.JPanel {
+public class FrmRegistroVentas extends javax.swing.JFrame {
+
+    private ControlPersistencia control = new ControlPersistencia();
+    private VentaDAO ventaDAO;
+    private DetalleVentaDAO detalleVentaDAO;
+    private ProductoDAO productoDAO;
+    private List<Producto> productos;
 
     /**
-     * Creates new form FrmRegistroVentas
+     * Creates new form FrmRegistrarVentas
      */
-    public FrmRegistroVentas() {
+    public FrmRegistroVentas(IConexionDB manejador) {
         initComponents();
+        this.ventaDAO = new VentaDAO(manejador);
+        this.productoDAO = new ProductoDAO(manejador);
+        this.detalleVentaDAO = new DetalleVentaDAO(manejador);
+        cargarProductos();
+        jDateChooser1.setDate(new Date(System.currentTimeMillis()));
+        SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 100, 1);
+        spnCantidad.setModel(model);
+        //----------------------------------------------------------------------------------------
+        spnCantidad.addChangeListener(e -> {
+            int cantidad = (int) spnCantidad.getValue();
+            actualizarPrecioTotal(cantidad);
+        });
+        //----------------------------------------------------------------------------------------
+        cbxNombre.addActionListener(e -> {
+            String nombreProducto = (String) cbxNombre.getSelectedItem();
+            Producto productoSeleccionado = productos.stream()
+                    .filter(p -> p.getNombre().equals(nombreProducto))
+                    .findFirst()
+                    .orElse(null);
+
+            if (productoSeleccionado != null) {
+                int stockDisponible = productoSeleccionado.getStock();
+                spnCantidad.setModel(new SpinnerNumberModel(1, 1, stockDisponible, 1));
+                actualizarPrecioTotal(1);
+            }
+        });
+    }
+
+    private void cargarProductos() {
+        productos = control.obtenerListaProductos();
+        cbxNombre.removeAllItems();
+
+        for (Producto producto : productos) {
+            cbxNombre.addItem(producto.getNombre());
+        }
+    }
+
+    private void actualizarPrecioTotal(int cantidad) {
+        String nombreProducto = (String) cbxNombre.getSelectedItem();
+        Producto productoSeleccionado = productos.stream()
+                .filter(p -> p.getNombre().equals(nombreProducto))
+                .findFirst()
+                .orElse(null);
+
+        if (productoSeleccionado != null) {
+            float precioUnitario = productoSeleccionado.getPrecio();
+            float precioTotal = precioUnitario * cantidad;
+            txtPrecio2.setText(String.valueOf(precioTotal));
+        }
     }
 
     /**
@@ -27,19 +95,280 @@ public class FrmRegistroVentas extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        lblExistencias = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtID = new javax.swing.JTextField();
+        txtPrecio2 = new javax.swing.JTextField();
+        btnRegistrar = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
+        cbxNombre = new javax.swing.JComboBox();
+        txtCategoria = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        spnCantidad = new javax.swing.JSpinner();
+        jLabel7 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(247, 221, 159));
+
+        jPanel2.setBackground(new java.awt.Color(253, 253, 250));
+
+        lblExistencias.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
+        lblExistencias.setForeground(new java.awt.Color(40, 114, 113));
+        lblExistencias.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblExistencias.setText("Registrar venta");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(lblExistencias, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                .addGap(114, 114, 114))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblExistencias, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jLabel1.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        jLabel1.setText("ID");
+
+        jLabel2.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        jLabel2.setText("Nombre");
+
+        jLabel3.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        jLabel3.setText("Precio total:");
+
+        jLabel5.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        jLabel5.setText("Categoría");
+
+        txtID.setEditable(false);
+        txtID.setBackground(new java.awt.Color(215, 215, 205));
+
+        txtPrecio2.setEditable(false);
+        txtPrecio2.setBackground(new java.awt.Color(215, 215, 205));
+        txtPrecio2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecio2KeyTyped(evt);
+            }
+        });
+
+        btnRegistrar.setBackground(new java.awt.Color(42, 157, 143));
+        btnRegistrar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        btnRegistrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
+
+        btnRegresar.setBackground(new java.awt.Color(231, 111, 81));
+        btnRegresar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
+        cbxNombre.setEditable(true);
+        cbxNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxNombreActionPerformed(evt);
+            }
+        });
+
+        txtCategoria.setEditable(false);
+        txtCategoria.setBackground(new java.awt.Color(215, 215, 205));
+
+        jLabel6.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        jLabel6.setText("Fecha");
+
+        jDateChooser1.setBackground(new java.awt.Color(215, 215, 205));
+
+        jLabel7.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        jLabel7.setText("Cantidad");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(spnCantidad)
+                            .addComponent(txtID)
+                            .addComponent(cbxNombre, 0, 235, Short.MAX_VALUE)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtCategoria)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(106, 106, 106)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                                .addComponent(txtPrecio2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnRegistrar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnRegresar)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(cbxNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(spnCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtPrecio2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(76, 76, 76)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegistrar)
+                    .addComponent(btnRegresar))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 516, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 487, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        if (txtPrecio2.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El precio no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        java.util.Date utilDate = new java.util.Date();
+        java.sql.Date fecha = new java.sql.Date(utilDate.getTime());
+        Float total;
+        try {
+            total = Float.parseFloat(txtPrecio2.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El precio debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String nombreProducto = (String) cbxNombre.getSelectedItem();
+        Producto productoSeleccionado = productos.stream()
+                .filter(p -> p.getNombre().equals(nombreProducto))
+                .findFirst()
+                .orElse(null);
+
+        if (productoSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, "Producto no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int cantidad = (int) spnCantidad.getValue();
+        Venta venta = new Venta(fecha, total);
+
+        try {
+            ventaDAO.insertar(venta);
+            int nuevoStock = productoSeleccionado.getStock() - cantidad;
+            productoDAO.actualizar(nuevoStock, productoSeleccionado.getId());
+            
+            DetalleVenta detalleVenta = new DetalleVenta(venta.getId(), productoSeleccionado.getId(), cantidad, productoSeleccionado.getPrecio());
+            detalleVentaDAO.insertar(detalleVenta);
+            
+            JOptionPane.showMessageDialog(this, "Venta registrada exitosamente!");
+
+        } catch (DAOException e) {
+            JOptionPane.showMessageDialog(this, "Error al registrar la venta: " + e.getMessage());
+        }
+
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        FrmControlExistencias ce = new FrmControlExistencias(control.obtenerListaProductos());
+        ce.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void cbxNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxNombreActionPerformed
+
+    private void txtPrecio2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecio2KeyTyped
+
+    }//GEN-LAST:event_txtPrecio2KeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton btnRegresar;
+    private javax.swing.JComboBox cbxNombre;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblExistencias;
+    private javax.swing.JSpinner spnCantidad;
+    private javax.swing.JTextField txtCategoria;
+    private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtPrecio;
+    private javax.swing.JTextField txtPrecio1;
+    private javax.swing.JTextField txtPrecio2;
     // End of variables declaration//GEN-END:variables
 }

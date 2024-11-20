@@ -37,7 +37,7 @@ public class ConexionDB implements IConexionDB {
      */
     public static ConexionDB getInstance() {
         if (instance == null) {
-            instance = new ConexionDB("jdbc:mysql://localhost/ferreteria", "root", "");
+            instance = new ConexionDB("jdbc:mysql://localhost/ferreteria", "root", "1234");
         }
         return instance;
     }
