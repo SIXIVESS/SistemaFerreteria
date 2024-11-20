@@ -66,11 +66,18 @@ public class Notificaciones {
        
             ActionListener salir = (ActionEvent e) -> {
                 Notificaciones.band = true;
+                systemtray.remove(trayIcon);
             };
 
-            ActionListener verinformacion = (ActionEvent e) -> {
-                JOptionPane.showMessageDialog(null, "Productos bajos en Stock; " + "\n" + prod, "Aplicación Java",  JOptionPane.INFORMATION_MESSAGE);
-                band = true;
+            ActionListener verinformacion = (ActionEvent e) -> {           
+             int opcion = JOptionPane.showOptionDialog(null, "Productos bajos en Stock; " + "\n" + prod,
+                                                  "Aplicación Java", JOptionPane.DEFAULT_OPTION,
+                                                  JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, null);
+            
+              if (opcion == JOptionPane.CLOSED_OPTION || opcion == 0) {
+                     Notificaciones.band = true;
+                     systemtray.remove(trayIcon);
+                     } 
             };
           
             MenuItem SalirItem = new MenuItem("Confirmacion");
@@ -105,14 +112,15 @@ public class Notificaciones {
             if (Notificaciones.band) {
                 timer.cancel();
              try {
-            Thread.sleep(3000); 
+           
+                  Thread.sleep(2000); 
         } catch (InterruptedException e) {
             e.printStackTrace();}
         
-          systemtray.remove(trayIcon);
+                systemtray.remove(trayIcon);
             } else {
                     prod += " " + FrmControlExistencias.msj;
-                notificacion();
+                    notificacion();
             }
         }
 
@@ -124,9 +132,10 @@ public class Notificaciones {
     }
 
     public void mje() throws AWTException {
+      
         Notificaciones.band = false;
         timer = new Timer();
-        timer.schedule(new MyTimerTask(), 0, 20000);
+        timer.schedule(new MyTimerTask(), 0, 200000);
         
     }
 }
