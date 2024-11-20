@@ -5,8 +5,10 @@
 package vista;
 
 import control.ControlPersistencia;
+import dao.DetalleVentaDAO;
 import dao.ProductoDAO;
 import dao.VentaDAO;
+import dominio.DetalleVenta;
 import dominio.Producto;
 import dominio.Venta;
 import excepciones.DAOException;
@@ -24,6 +26,7 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
 
     private ControlPersistencia control = new ControlPersistencia();
     private VentaDAO ventaDAO;
+    private DetalleVentaDAO detalleVentaDAO;
     private ProductoDAO productoDAO;
     private List<Producto> productos;
 
@@ -34,6 +37,7 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
         initComponents();
         this.ventaDAO = new VentaDAO(manejador);
         this.productoDAO = new ProductoDAO(manejador);
+        this.detalleVentaDAO = new DetalleVentaDAO(manejador);
         cargarProductos();
         jDateChooser1.setDate(new Date(System.currentTimeMillis()));
         SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 100, 1);
@@ -43,7 +47,7 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
             int cantidad = (int) spnCantidad.getValue();
             actualizarPrecioTotal(cantidad);
         });
-//----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         cbxNombre.addActionListener(e -> {
             String nombreProducto = (String) cbxNombre.getSelectedItem();
             Producto productoSeleccionado = productos.stream()
@@ -319,6 +323,10 @@ public class FrmRegistroVentas extends javax.swing.JFrame {
             ventaDAO.insertar(venta);
             int nuevoStock = productoSeleccionado.getStock() - cantidad;
             productoDAO.actualizar(nuevoStock, productoSeleccionado.getId());
+            
+            DetalleVenta detalleVenta = new DetalleVenta(venta.getId(), productoSeleccionado.getId(), cantidad, productoSeleccionado.getPrecio());
+            detalleVentaDAO.insertar(detalleVenta);
+            
             JOptionPane.showMessageDialog(this, "Venta registrada exitosamente!");
 
         } catch (DAOException e) {
