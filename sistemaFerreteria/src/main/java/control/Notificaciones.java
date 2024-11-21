@@ -25,7 +25,7 @@ public class Notificaciones {
 
     PopupMenu popup = new PopupMenu();
     private Image image = new ImageIcon(getClass().getResource("/Imagenes/noti.png")).getImage();
-    private final TrayIcon trayIcon = new TrayIcon(image, "Aplicación Java", popup);
+    private TrayIcon trayIcon = new TrayIcon(image, "Aplicación Java", popup);
     final SystemTray systemtray = SystemTray.getSystemTray();
     private Timer timer;
     public static boolean band;
@@ -137,6 +137,10 @@ public class Notificaciones {
         timer = new Timer();
         timer.schedule(new MyTimerTask(), 0, 200000);
         
+    }
+    
+    public void setTrayIcon(TrayIcon trayIcon) {
+        this.trayIcon = trayIcon;
     }
 }
 
