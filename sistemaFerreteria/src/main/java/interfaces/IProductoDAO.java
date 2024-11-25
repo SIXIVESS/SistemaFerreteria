@@ -2,7 +2,10 @@ package interfaces;
 
 import dominio.Producto;
 import excepciones.DAOException;
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  * Interfaz que establece los métodos para interactuar con un producto de la base de datos.
@@ -55,4 +58,11 @@ public interface IProductoDAO {
      * @throws DAOException 
      */
     public List<Producto> consultarListaBajoStock()throws DAOException;
+    /**
+     * Generador de Reporte Jasper Report
+     * @return
+     * @throws java.sql.SQLException
+     * @throws DAOException 
+     */
+    public JasperPrint reporteMasVendidos(String inicio, String fin)throws SQLException;
 }

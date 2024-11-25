@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ferreteriaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="571f93a3-127b-43c1-a151-20f132417d10">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ferreteria"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT ferreteria.productos.`ProductoID`,
+	ferreteria.productos.`Nombre`
+	FROM productos
+
+]]>
+	</queryString>
+	<field name="ProductoId" class="java.lang.Integer"/>
+	<field name="Producto" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="95" splitType="Stretch">
+			<rectangle>
+				<reportElement x="-20" y="0" width="595" height="95" backcolor="#F3E9CF" uuid="a599f14c-2278-4b4e-bb65-45e2d77d70a3"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="#F3E9CF"/>
+				</graphicElement>
+			</rectangle>
+			<image>
+				<reportElement x="70" y="7" width="80" height="81" uuid="e81c0fc5-046e-4e97-8346-6fd7dfc4536f"/>
+				<imageExpression><![CDATA["C:/Users/jessi/Desktop/Reportes/logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="120" y="10" width="342" height="71" forecolor="#287271" uuid="77ad0605-623a-4359-a846-45fc9f8f4285"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Comic Sans MS" size="45" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ferreteria]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="66" splitType="Stretch">
+			<staticText>
+				<reportElement x="16" y="0" width="100" height="30" uuid="7d15e133-3f43-4711-9b45-b8c0af917027">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a59591c5-0ad1-4932-9ad6-cba5d5b2083b"/>
+				</reportElement>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="173" y="0" width="100" height="30" uuid="33da123f-1fad-4f6a-a2f3-044bda8d0fa8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="028a282d-103a-4fa8-9ca2-8ae4dfa574a3"/>
+				</reportElement>
+				<text><![CDATA[Producto]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="16" y="23" width="100" height="30" uuid="c7d2a3d8-1426-41d4-a351-bd397a9ef309">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a59591c5-0ad1-4932-9ad6-cba5d5b2083b"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{ProductoId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="173" y="27" width="100" height="30" uuid="2d9cf93f-f5e6-40c2-b25a-b39e816b083e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="028a282d-103a-4fa8-9ca2-8ae4dfa574a3"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Producto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

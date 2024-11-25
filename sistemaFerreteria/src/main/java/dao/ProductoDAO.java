@@ -4,15 +4,30 @@ import dominio.Producto;
 import excepciones.DAOException;
 import interfaces.IConexionDB;
 import interfaces.IProductoDAO;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 /**
  * Contiene las operaciones de persistencia con los productos de la base de datos.
@@ -225,5 +240,57 @@ public class ProductoDAO implements IProductoDAO {
             throw new DAOException("No se pudo consultar la lista de productos" + sqle.getMessage());
         }
     }
+     
+     /**
+      * Genera un reporte de los productos mas vendidos en un rango de fechas
+      * @param inicio
+      * @param fin
+      * @return jasperPrint
+      * @throws SQLException 
+      */
+    @Override
+     public JasperPrint reporteMasVendidos(String inicio, String fin) throws SQLException{
+         Map<String, Object> parametros = new HashMap<>();
+         String sql = "SELECT ferreteria.productos.`ProductoID`,\n" +
+                "	ferreteria.productos.`Nombre`,\n" +
+                "	SUM( ferreteria.detalleventas.`Cantidad`) AS Vendido,\n" +
+                "	ferreteria.ventas.`Fecha`\n" +
+                "FROM ferreteria.detalleventas\n" +
+                "	JOIN ferreteria.ventas  ON \n" +
+                "	 ferreteria.detalleventas.`VentaID` = ferreteria.ventas.`VentaID` \n" +
+                "	JOIN ferreteria.productos  ON \n" +
+                "	 ferreteria.detalleventas.`ProductoID` = ferreteria.productos.`ProductoID` \n" +
+                "WHERE \n" +
+                "	ferreteria.ventas.`Fecha` BETWEEN  ? AND ? \n" +
+                "GROUP BY ferreteria.productos.`ProductoID`,\n" +
+                "	ferreteria.productos.`Nombre`, ferreteria.ventas.`Fecha`\n" +
+                "ORDER BY Vendido DESC";
+         File reporte = new File(getClass().getResource("/Reporte/ferreteriaReporte.jasper").getFile());
+         if(!reporte.exists()){
+            return null;
+         }
+        try {        
+            Connection conexion = MANAGER.crearConexion();
+            PreparedStatement comando = conexion.prepareStatement(sql);
+            comando.setString(1, inicio);
+            comando.setString(2, fin);
+            ResultSet rs = comando.executeQuery();
+            InputStream is = new BufferedInputStream(new FileInputStream(reporte.getAbsoluteFile()));
+
+             try {
+                  JRResultSetDataSource jrrs = new JRResultSetDataSource(rs);
+                  JasperReport jr = (JasperReport) JRLoader.loadObject(is);
+                  JasperPrint jp = JasperFillManager.fillReport(jr, parametros,jrrs);
+                  return jp;
+
+             } catch (JRException ex) {
+                 Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
+             }
+        } 
+        catch (FileNotFoundException ex) {
+            Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+     }
     
 }

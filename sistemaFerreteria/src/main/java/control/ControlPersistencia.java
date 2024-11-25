@@ -14,7 +14,10 @@ import interfaces.ICategoriaDAO;
 import interfaces.IConexionDB;
 import interfaces.IProductoDAO;
 import interfaces.IUsuarioDAO;
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  * Lleva el control de las funciones de persistencia del sistema. Controla las
@@ -167,5 +170,9 @@ public class ControlPersistencia {
         // Hashear la contraseña ingresada
         String contrasenaHasheada = HashUtil.hashPassword(contrasena);
         return contrasenaHasheada.equals(usuarioBD.getContrasena());
+    }
+    
+    public JasperPrint reporteMasVendido(String inicio, String fin) throws SQLException{
+        return productoDAO.reporteMasVendidos(inicio,fin);
     }
 }
