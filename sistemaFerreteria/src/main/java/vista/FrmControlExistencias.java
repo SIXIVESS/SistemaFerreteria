@@ -8,6 +8,8 @@ import interfaces.IConexionDB;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -48,6 +50,26 @@ public final class FrmControlExistencias extends javax.swing.JFrame {
             });
         }
         initComponents();
+        
+        txtBuscar.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if(txtBuscar.getText().equals("Buscador...")) {
+                    txtBuscar.setText("");
+                    txtBuscar.setForeground(Color.black);
+                }
+            }
+            
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(txtBuscar.getText().isEmpty()) {
+                    txtBuscar.setText("Buscador...");
+                    txtBuscar.setForeground(Color.gray);
+                }
+            }
+        });
+        
+        btnReset.setVisible(false);
 
         tblProductos.setDefaultRenderer(Object.class, new ProductosRenderer());
         mostrarNotificacion();
@@ -68,12 +90,14 @@ public final class FrmControlExistencias extends javax.swing.JFrame {
         tblProductos = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         lblExistencias = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtBuscar = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
         btnRegistroVenta = new javax.swing.JButton();
         btnReportes = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -103,8 +127,8 @@ public final class FrmControlExistencias extends javax.swing.JFrame {
             .addComponent(lblExistencias, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        jTextField1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        jTextField1.setText("Buscador");
+        txtBuscar.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        txtBuscar.setText("Buscador...");
 
         btnRegresar.setBackground(new java.awt.Color(231, 111, 81));
         btnRegresar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
@@ -156,6 +180,26 @@ public final class FrmControlExistencias extends javax.swing.JFrame {
             }
         });
 
+        btnBuscar.setBackground(new java.awt.Color(42, 157, 143));
+        btnBuscar.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        btnReset.setBackground(new java.awt.Color(42, 157, 143));
+        btnReset.setFont(new java.awt.Font("Microsoft Tai Le", 1, 14)); // NOI18N
+        btnReset.setForeground(new java.awt.Color(255, 255, 255));
+        btnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/reset.png"))); // NOI18N
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -165,7 +209,12 @@ public final class FrmControlExistencias extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnReset))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAgregar)
                         .addGap(18, 18, 18)
@@ -183,8 +232,11 @@ public final class FrmControlExistencias extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtBuscar)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(14, 14, 14)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -209,7 +261,7 @@ public final class FrmControlExistencias extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 587, Short.MAX_VALUE)
+            .addGap(0, 595, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -243,8 +295,6 @@ public final class FrmControlExistencias extends javax.swing.JFrame {
             ap.setVisible(true);
             dispose();
         }
-
-
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnRegistroVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroVentaActionPerformed
@@ -259,6 +309,55 @@ public final class FrmControlExistencias extends javax.swing.JFrame {
         gr.setVisible(true);
         dispose();  
     }//GEN-LAST:event_btnReportesActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        productosModel.setRowCount(0);
+        
+        if(!txtBuscar.getText().equals("Buscador...")) {
+            btnReset.setVisible(true);
+            List<Producto> productos = control.obtenerListaProductosPorNombre(txtBuscar.getText());
+            
+            for (Producto producto : productos) {
+                productosModel.addRow(new Object[]{
+                    producto.getId(),
+                    producto.getNombre(),
+                    producto.getPrecio(),
+                    producto.getStock(),
+                    producto.getId_categoria()
+                });
+            }
+        }else {
+            List<Producto> productos = control.obtenerListaProductos();
+            
+            for (Producto producto : productos) {
+                productosModel.addRow(new Object[]{
+                    producto.getId(),
+                    producto.getNombre(),
+                    producto.getPrecio(),
+                    producto.getStock(),
+                    producto.getId_categoria()
+                });
+            }
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        productosModel.setRowCount(0);
+        txtBuscar.setText("Buscador...");
+        btnReset.setVisible(false);
+        
+        List<Producto> productos = control.obtenerListaProductos();
+            
+            for (Producto producto : productos) {
+                productosModel.addRow(new Object[]{
+                    producto.getId(),
+                    producto.getNombre(),
+                    producto.getPrecio(),
+                    producto.getStock(),
+                    producto.getId_categoria()
+                });
+            }
+    }//GEN-LAST:event_btnResetActionPerformed
     
     public List<String> seleccionarDato() {
         int filaseleccionada;
@@ -280,15 +379,17 @@ public final class FrmControlExistencias extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnRegistroVenta;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnReportes;
+    private javax.swing.JButton btnReset;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblExistencias;
     private javax.swing.JTable tblProductos;
+    private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 
     private static class ProductosRenderer extends DefaultTableCellRenderer {

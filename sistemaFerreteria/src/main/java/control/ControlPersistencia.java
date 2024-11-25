@@ -99,6 +99,15 @@ public class ControlPersistencia {
             return List.of(); // Retorna una lista vacía en caso de error
         }
     }
+    
+    public List<Producto> obtenerListaProductosPorNombre(String nombre) {
+        try {
+            return productoDAO.consultarPorNombre(nombre);
+        } catch (Exception e) {
+            System.err.println("Error al obtener productos: " + e.getMessage());
+            return List.of(); // Retorna una lista vacía en caso de error
+        }
+    }
 
     /**
      *

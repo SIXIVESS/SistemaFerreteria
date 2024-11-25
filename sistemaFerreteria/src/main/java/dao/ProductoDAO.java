@@ -182,6 +182,44 @@ public class ProductoDAO implements IProductoDAO {
             throw new DAOException("No se pudo consultar la lista de productos" + sqle.getMessage());
         }
     }
+    
+    /**
+     * Regresa la lista de todos los productos que coinciden con el nombre del parámetro.
+     * @param nombre Nombre del producto que se quiere buscar.
+     * @return La lista de los productos que coinciden con el nombre.
+     * @throws DAOException Si no seencuentran los productos.
+     */
+    @Override
+    public List<Producto> consultarPorNombre(String nombre) throws DAOException {
+        String sql = "select ProductoID, Nombre, Descripcion, Precio, Stock, CategoriaID from productos where Nombre like ?";
+        List<Producto> listaProductos = new LinkedList<>();
+        
+        try(
+            Connection conexion = MANAGER.crearConexion();
+            PreparedStatement comando = conexion.prepareStatement(sql);
+        ) {
+            comando.setString(1, "%" + nombre + "%");
+            ResultSet resultado = comando.executeQuery();
+            
+            while(resultado.next()) {
+                Integer id = resultado.getInt("ProductoID");
+                String nombreP = resultado.getString("Nombre");
+                String descripcion = resultado.getString("Descripcion");
+                Float precio = resultado.getFloat("Precio");
+                Integer stock = resultado.getInt("Stock");
+                Integer id_categoria = resultado.getInt("CategoriaID");
+                Producto producto = new Producto(id, nombreP, descripcion, precio, stock, id_categoria);
+                
+                listaProductos.add(producto);
+            }
+            
+            return listaProductos;
+        } catch(SQLException sqle) {
+            LOG.log(Level.SEVERE, "No se pudo consultar la lista de productos" + "{0}", sqle.getMessage());
+            throw new DAOException("No se pudo consultar la lista de productos" + sqle.getMessage());
+        }
+    }
+    
   /**
    * Regresa mensaje de confirmacion, producto actualizado
    * @param stock

@@ -8,6 +8,7 @@ dominio\DetalleVenta.class
 control\Notificaciones$1.class
 vista\FrmActualizarProductos$1.class
 vista\FrmRegistroVentas$1.class
+vista\FrmControlExistencias$7.class
 interfaces\IVentaDAO.class
 control\Notificaciones$MyTimerTask.class
 db\ConexionDB.class
@@ -22,6 +23,7 @@ vista\FrmActualizarProductos.class
 vista\FrmLogin$2.class
 main\SistemaFerreteria.class
 interfaces\ICategoriaDAO.class
+vista\FrmControlExistencias$8.class
 vista\FrmMenuPrincipal$1.class
 dominio\Categoria.class
 vista\FrmControlExistencias$1.class
@@ -56,4 +58,5 @@ control\ControlPersistencia.class
 vista\FrmLogin$3.class
 vista\FrmControlExistencias$3.class
 dao\ProductoDAO.class
+vista\FrmControlExistencias$6.class
 vista\FrmRegistroVentas$2.class

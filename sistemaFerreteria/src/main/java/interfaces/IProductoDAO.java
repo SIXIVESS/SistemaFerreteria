@@ -45,6 +45,14 @@ public interface IProductoDAO {
     List<Producto> consultarLista() throws DAOException;
     
     /**
+     * Regresa la lista de todos los productos existentes en la base de datos con el nombre del parámetro.
+     * @param nombre Nombre del producto que se está buscando.
+     * @return Lista de productos que coinciden con el nombre puesto.
+     * @throws DAOException Si no se encuentran los prodcutos.
+     */
+    List<Producto> consultarPorNombre(String nombre) throws DAOException;
+    
+    /**
      * Actualiza el producto seleccionado
      * @param stock
      * @param id
