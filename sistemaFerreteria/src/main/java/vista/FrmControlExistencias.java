@@ -259,6 +259,7 @@ public final class FrmControlExistencias extends javax.swing.JFrame {
         gr.setVisible(true);
         dispose();  
     }//GEN-LAST:event_btnReportesActionPerformed
+    
     public List<String> seleccionarDato() {
         int filaseleccionada;
         List<String> datos = new ArrayList<>(5);

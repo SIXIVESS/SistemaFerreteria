@@ -7,6 +7,7 @@
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="685"/>
 	<parameter name="fechaInicio" class="java.lang.String"/>
 	<parameter name="fechaFin" class="java.lang.String"/>
+	<parameter name="logoPath" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT ferreteria.productos.`ProductoID`,
 	ferreteria.productos.`Nombre`,
@@ -55,7 +56,7 @@ ORDER BY Vendido DESC]]>
 			</staticText>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement x="90" y="-3" width="50" height="60" uuid="ea80aa5b-e552-4b77-a441-5441952e3a6a"/>
-				<imageExpression><![CDATA["C://Users//jessi//Desktop//SistemaFerreteria//Reportes//MasVendidos//logo.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logoPath}]]></imageExpression>
 			</image>
 		</band>
 	</title>

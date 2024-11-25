@@ -265,6 +265,8 @@ public class ProductoDAO implements IProductoDAO {
                 "GROUP BY ferreteria.productos.`ProductoID`,\n" +
                 "	ferreteria.productos.`Nombre`, ferreteria.ventas.`Fecha`\n" +
                 "ORDER BY Vendido DESC";
+         String logoPath = this.getClass().getResource("/Reporte/logo.png").getPath();
+         parametros.put("logoPath", logoPath);
          File reporte = new File(getClass().getResource("/Reporte/ferreteriaReporte.jasper").getFile());
          if(!reporte.exists()){
             return null;
@@ -280,7 +282,7 @@ public class ProductoDAO implements IProductoDAO {
              try {
                   JRResultSetDataSource jrrs = new JRResultSetDataSource(rs);
                   JasperReport jr = (JasperReport) JRLoader.loadObject(is);
-                  JasperPrint jp = JasperFillManager.fillReport(jr, parametros,jrrs);
+                  JasperPrint jp = JasperFillManager.fillReport(jr, parametros, jrrs);
                   return jp;
 
              } catch (JRException ex) {

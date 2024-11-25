@@ -1,6 +1,5 @@
 package control;
 
-import com.mysql.cj.util.Util;
 import dao.CategoriaDAO;
 import dao.ProductoDAO;
 import dao.UsuarioDAO;
@@ -14,7 +13,6 @@ import interfaces.ICategoriaDAO;
 import interfaces.IConexionDB;
 import interfaces.IProductoDAO;
 import interfaces.IUsuarioDAO;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import net.sf.jasperreports.engine.JasperPrint;
